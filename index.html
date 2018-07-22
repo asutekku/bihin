@@ -10,36 +10,89 @@
     </div>
     <div class="controls">
         <div class="slidecontainer">
-            <div class="option">
-                <label for="terraceDepth">
-                    Terassin leveys /m
-                </label>
-                <input type="range" min="3" max="12" value="3" id="terraceDepth">
+            <div class="optionContainer">
+                <h3>Terassi</h3>
+                <div class="option">
+                    <label for="terraceDepth">
+                        Terassin leveys /m
+                    </label>
+                    <input type="range" min="3" max="12" value="3" id="terraceWidth">
+                </div>
+                <div class="option">
+                    <label for="terraceWidth">
+                        Terassin syvyys /m
+                    </label><input type="range" min="3" max="12" value="3" id="terraceDepth">
+                </div>
             </div>
-            <div class="option">
-                <label for="terraceWidth">
-                    Terassin syvyys /m
-                </label><input type="range" min="3" max="12" value="3" id="terraceWidth">
+            <div class="optionContainer">
+                <h3>Katos</h3>
+                <div class="option">
+                    <label for="showTerrace">
+                        Näytä katos
+                    </label><input type="checkbox" id="showTerrace" checked>
+                </div>
+                <div class="option">
+                    <label for="terraceHeight">
+                        Katoksen korkeus /m
+                    </label><input type="range" min="180" max="300" value="220" id="terraceHeight">
+                </div>
+                <div class="option">
+                    <label for="terraceHeightBack">
+                        Katoksen takaosan korkeus /m
+                    </label><input type="range" min="240" max="400" value="320" id="terraceHeightBack">
+                </div>
             </div>
-            <div class="option">
-                <label for="terraceHeight">
-                    Terassin korkeus /m
-                </label><input type="range" min="180" max="300" value="220" id="terraceHeight">
-            </div>
-            <div class="option">
-                <label for="fenceHeight">
-                    Aidan korkeus /m
-                </label><input type="range" min="40" max="180" value="80" id="fenceHeight">
-            </div>
-            <div class="option">
-                <label for="showFences">
-                    Näytä aidat
-                </label><input type="checkbox" id="showFences">
-            </div>
-            <div class="option">
-                <label for="showTerrace">
-                    Näytä katos
-                </label><input type="checkbox" id="showTerrace">
+            <div class="optionContainer">
+                <h3>Terassiaita</h3>
+                <div class="option">
+                    <label for="showFences">
+                        Näytä aidat
+                    </label><input type="checkbox" id="showFences">
+                </div>
+                <div id="showFenceOptions" class="hidden">
+                    <div class="option">
+                        <label for="showFenceLeft">
+                            Näytä vasen sivuaita
+                        </label><input type="checkbox" id="showFenceLeft" checked>
+                    </div>
+                    <div class="option">
+                        <label for="showFenceFront">
+                            Näytä keskiaita
+                        </label><input type="checkbox" id="showFenceFront" checked>
+                    </div>
+                    <div class="option">
+                        <label for="showFenceRight">
+                            Näytä oikea sivuaita
+                        </label><input type="checkbox" id="showFenceRight" checked>
+                    </div>
+                </div>
+                <div class="option" id="optionEvenHeightFence">
+                    <label for="evenFenceHeight">
+                        Tasakorkuiset aidat
+                    </label><input type="checkbox" id="evenFenceHeight" checked>
+                </div>
+                <div class="option" id="optionFenceHeight">
+                    <label for="fenceHeight">
+                        Aidan korkeus /m
+                    </label><input type="range" min="40" max="220" value="80" id="fenceHeight">
+                </div>
+                <div id="fenceHeightStrict" class="hidden">
+                    <div class="option" id="optionFenceHeightLeft">
+                        <label for="fenceHeight">
+                            Vasemman sivuaidan korkeus /m
+                        </label><input type="range" min="40" max="220" value="80" id="fenceHeightLeft">
+                    </div>
+                    <div class="option" id="optionFenceHeightFront">
+                        <label for="fenceHeight">
+                            Etuaidan korkeus /m
+                        </label><input type="range" min="40" max="220" value="80" id="fenceHeightFront">
+                    </div>
+                    <div class="option" id="optionFenceHeightRight">
+                        <label for="fenceHeight">
+                            Oikean sivuaidan korkeus /m
+                        </label><input type="range" min="40" max="220" value="80" id="fenceHeightRight">
+                    </div>
+                </div>
             </div>
             <div class="option">
                 <label for="showTerrace">
@@ -56,8 +109,6 @@
 				vWorldPosition = worldPosition.xyz;
 				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 			}
-
-
 </script>
 
 <script type="x-shader/x-fragment" id="fragmentShader">
@@ -70,8 +121,6 @@
 				float h = normalize( vWorldPosition + offset ).y;
 				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
 			}
-
-
 </script>
 <script src="lib/three.js"></script>
 <script src="lib/OrbitControls.js"></script>
