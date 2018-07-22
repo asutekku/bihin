@@ -1,0 +1,17 @@
+.container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.innerContainer {
+    grid-column: 1 / 3;
+    grid-row: 1;
+}
+
+#canvas-3d {
+    width: 100% !important;
+    height: 100vh!important;
+}
+
+.controls {
+}

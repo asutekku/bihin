@@ -1,0 +1,80 @@
+<html>
+<head>
+    <title>Terrace</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<div class="container">
+    <div id="3dContainer" class="innerContainer">
+
+    </div>
+    <div class="controls">
+        <div class="slidecontainer">
+            <div class="option">
+                <label for="terraceDepth">
+                    Terassin leveys /m
+                </label>
+                <input type="range" min="3" max="12" value="3" id="terraceDepth">
+            </div>
+            <div class="option">
+                <label for="terraceWidth">
+                    Terassin syvyys /m
+                </label><input type="range" min="3" max="12" value="3" id="terraceWidth">
+            </div>
+            <div class="option">
+                <label for="terraceHeight">
+                    Terassin korkeus /m
+                </label><input type="range" min="180" max="300" value="220" id="terraceHeight">
+            </div>
+            <div class="option">
+                <label for="fenceHeight">
+                    Aidan korkeus /m
+                </label><input type="range" min="40" max="180" value="80" id="fenceHeight">
+            </div>
+            <div class="option">
+                <label for="showFences">
+                    Näytä aidat
+                </label><input type="checkbox" id="showFences">
+            </div>
+            <div class="option">
+                <label for="showTerrace">
+                    Näytä katos
+                </label><input type="checkbox" id="showTerrace">
+            </div>
+            <div class="option">
+                <label for="showTerrace">
+                    Näytä ikkunat
+                </label><input type="checkbox" id="showWindows" checked>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="x-shader/x-vertex" id="vertexShader">
+			varying vec3 vWorldPosition;
+			void main() {
+				vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+				vWorldPosition = worldPosition.xyz;
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+			}
+
+
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentShader">
+			uniform vec3 topColor;
+			uniform vec3 bottomColor;
+			uniform float offset;
+			uniform float exponent;
+			varying vec3 vWorldPosition;
+			void main() {
+				float h = normalize( vWorldPosition + offset ).y;
+				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+			}
+
+
+</script>
+<script src="lib/three.js"></script>
+<script src="lib/OrbitControls.js"></script>
+<script src="build/app.js"></script>
+</body>
+</html>
