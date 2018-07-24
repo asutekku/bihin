@@ -20,10 +20,11 @@ class TerraceDesigner {
         TerraceDesigner.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 50000);
         TerraceDesigner.controls = new THREE.OrbitControls(TerraceDesigner.camera, TerraceDesigner.domContainer);
         TerraceDesigner.camera.position.set(400, 180, 800);
+        TerraceDesigner.camera.lookAt(new THREE.Vector3(0, 120, 0));
         TerraceDesigner.mouse = new THREE.Vector2();
         TerraceDesigner.controls.update();
         TerraceDesigner.renderer = new THREE.WebGLRenderer();
-        TerraceDesigner.renderer.setSize(window.innerWidth, window.innerHeight * 2);
+        TerraceDesigner.renderer.setSize(window.innerWidth, window.innerHeight);
         TerraceDesigner.renderer.domElement.id = "canvas-3d";
         TerraceDesigner.renderer.shadowMap.enabled = true;
         TerraceDesigner.domContainer.appendChild(TerraceDesigner.renderer.domElement);
@@ -56,9 +57,9 @@ class TerraceDesigner {
         dirLight.position.multiplyScalar(30);
         TerraceDesigner.scene.add(dirLight);
         dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 2048;
-        dirLight.shadow.mapSize.height = 2048;
-        const d = 500;
+        dirLight.shadow.mapSize.width = 4096;
+        dirLight.shadow.mapSize.height = 4096;
+        const d = 2000;
         dirLight.shadow.camera.left = -d;
         dirLight.shadow.camera.right = d;
         dirLight.shadow.camera.top = d;
@@ -252,13 +253,26 @@ class PatioBuilder {
         if (this.showFences) {
             PatioBuilder.fences();
         }
-        //Canopy
         if (this.showCanopy) {
             PatioBuilder.canopy();
+            PatioBuilder.ceiling();
         }
         if (this.showWindows) {
             PatioBuilder.windows();
         }
+    }
+    static ceiling() {
+        const count = Math.round(this.patioWidth / 80), length = Math.sqrt(Math.pow(this.patioDepth, 2) + Math.pow(this.poleHeightBack - this.poleHeight, 2)) + 10, x = this.patioDepth / 2 - this.poleWidth / 2, y = this.patioWidth / 2 - this.poleWidth / 2, divide = this.patioWidth / count, height = this.poleHeightBack - this.poleHeight, angle = Math.asin(height / length);
+        console.log(angle);
+        for (let i = 0; i < count + 1; i++) {
+            const ceilingPole = this.ceilingPole(-x, y - i * divide, length, 90, this.poleHeightBack);
+            ceilingPole.rotateX(angle);
+            TerraceDesigner.scene.add(ceilingPole);
+        }
+        const ceilingWindow = this.window(-x, y, this.patioWidth, 180, length);
+        ceilingWindow.position.set(-x, this.poleHeightBack + 8, y);
+        ceilingWindow.rotateZ(angle + Util.toRad(90));
+        TerraceDesigner.scene.add(ceilingWindow);
     }
     static fences() {
         //The front facing fence
@@ -342,18 +356,24 @@ class PatioBuilder {
                 const polePosition = (-this.patioBaseWidth) * i + this.poleWidth / 2;
                 if (i % 2 === 0 && this.patioDepthCount % 2 === 0 && this.patioDepthCount % 3 !== 0) {
                     this.sidePoles++;
-                    const pole = this.pole(x + polePosition, y, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
+                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
+                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
+                    TerraceDesigner.scene.add(poleLeft);
+                    TerraceDesigner.scene.add(poleRight);
                 }
                 else if (i % 3 == 0 && this.patioDepthCount % 3 === 0) {
                     this.sidePoles++;
-                    const pole = this.pole(x + polePosition, y, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
+                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
+                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
+                    TerraceDesigner.scene.add(poleLeft);
+                    TerraceDesigner.scene.add(poleRight);
                 }
                 else if (i % 3 == 0 && i % 2 == 0 && this.patioDepthCount % 3 === 0) {
                     this.sidePoles++;
-                    const pole = this.pole(x + polePosition, y, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
+                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
+                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
+                    TerraceDesigner.scene.add(poleLeft);
+                    TerraceDesigner.scene.add(poleRight);
                 }
             }
         }
@@ -405,13 +425,13 @@ class PatioBuilder {
         const y = (-this.patioDepth / 2 - this.poleWidth / 2);
         for (let j = 0; j < slotCountSide; j++) {
             const x = this.patioWidth / 2 - this.poleWidth / 1.5;
-            slotSide(x, y + j * (sideSlotWidth + this.poleWidth), sideWindowWidth);
+            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + (this.poleWidth * 1.5), sideWindowWidth);
             //this.patioWidth / 2 - frontWindowWidth / 2 + this.poleWidth
         }
         //Windows right
         for (let j = 0; j < slotCountSide; j++) {
             const x = -(this.patioWidth / 2 - this.poleWidth / 1.5);
-            slotSide(x, y + j * (sideSlotWidth + this.poleWidth), sideWindowWidth);
+            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + (this.poleWidth * 1.5), sideWindowWidth);
             //this.patioWidth / 2 - frontWindowWidth / 2 + this.poleWidth
         }
     }
@@ -432,9 +452,10 @@ class PatioBuilder {
         let material = new THREE.MeshPhongMaterial({ color: this.terraceColor });
         material.color.setHSL(2.55, 2.55, 2.55);
         let fence = new THREE.Mesh(geometry, material);
+        fence.geometry.translate(0, (height ? height : this.fenceHeight) / 2, 0);
         fence.castShadow = true;
         fence.receiveShadow = true;
-        fence.position.set(x, (height ? height : this.fenceHeight) / 2, y);
+        fence.position.set(x, 0, y);
         if (rot)
             fence.rotateY(Util.toRad(rot));
         PatioBuilder.patioElements.push(fence);
@@ -445,9 +466,10 @@ class PatioBuilder {
         let material = new THREE.MeshPhongMaterial({ color: this.terraceColor });
         material.color.setHSL(2.55, 2.55, 2.55);
         let pole = new THREE.Mesh(geometry, material);
+        pole.geometry.translate(0, height / 2, 0);
         pole.castShadow = true;
         pole.receiveShadow = true;
-        pole.position.set(x, height / 2, y);
+        pole.position.set(x, 0, y);
         PatioBuilder.patioElements.push(pole);
         return pole;
     }
@@ -456,23 +478,23 @@ class PatioBuilder {
         let material = new THREE.MeshPhongMaterial({ color: this.terraceColor });
         material.color.setHSL(2.55, 2.55, 2.55);
         let pole = new THREE.Mesh(geometry, material);
-        pole.geometry.translate(0, 0, length / 2);
+        pole.geometry.translate(0, this.poleWidth / 2, length / 2); // Set's the origin to the bottom of the pole
         pole.castShadow = true;
         pole.receiveShadow = true;
-        pole.position.set(x, (verPlus ? this.poleHeightBack : this.poleHeight) + this.poleWidth / 2, y);
+        pole.position.set(x, (verPlus ? this.poleHeightBack : this.poleHeight), y);
         if (rot)
             pole.rotateY(Util.toRad(rot));
         PatioBuilder.patioElements.push(pole);
         return pole;
     }
-    static window(x, y, width, rot) {
-        const geometry = new THREE.BoxGeometry(this.windowDepth, this.poleHeight, width);
-        let material = new THREE.MeshLambertMaterial({ color: "#80d9dd", transparent: true, opacity: 0.5 });
+    static window(x, y, width, rot, height) {
+        const geometry = new THREE.BoxGeometry(this.windowDepth, height ? height : this.poleHeight, width);
+        let material = new THREE.MeshLambertMaterial({ color: "#b8bfc6", transparent: true, opacity: 0.5 });
         let window = new THREE.Mesh(geometry, material);
-        window.geometry.translate(0, 0, width / 2);
+        window.geometry.translate(0, (height ? height : this.poleHeight) / 2, width / 2);
         window.castShadow = false;
         window.receiveShadow = false;
-        window.position.set(x, this.poleHeight / 2, y);
+        window.position.set(x, 0, y);
         if (rot)
             window.rotateY(Util.toRad(rot));
         PatioBuilder.patioElements.push(window);
@@ -480,6 +502,7 @@ class PatioBuilder {
     }
 }
 PatioBuilder.patioElements = [];
+PatioBuilder.patioFences = [];
 PatioBuilder.patioDepthCount = 3;
 PatioBuilder.patioWidthCount = 3;
 PatioBuilder.patioBaseWidth = 100; // cm

@@ -1,3 +1,6 @@
+html{
+    font-family: "Segoe UI", sans-serif;
+}
 .container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
