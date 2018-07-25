@@ -1,4 +1,4 @@
-import {PerspectiveCamera, Scene, WebGLRenderer, Color, Clock, Vector3} from "three";
+import {PerspectiveCamera, Scene, WebGLRenderer, Color, Clock, Vector3, PCFSoftShadowMap} from "three";
 import GeneralLights from "./sceneComponents/GeneralLights";
 import SceneSubject from "./sceneComponents/SceneSubject";
 import Scenery from "./sceneComponents/Scenery";
@@ -14,7 +14,10 @@ export class SceneManager {
     private scenery: Scenery;
     private clock: Clock;
     private readonly screenDimensions: { width: number; height: number };
-    private mousePosition: any;
+    private mousePosition: any = {
+        x: 0,
+        y: 0
+    };
     private controls: OrbitControls;
     private domContainer = document.getElementById("terraceDesignerContainer")!;
     private patio: Patio;
@@ -47,11 +50,10 @@ export class SceneManager {
         const DPR: number = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
         renderer.setPixelRatio(DPR);
         renderer.setSize(width, height);
-
         renderer.gammaInput = true;
         renderer.gammaOutput = true;
         renderer.shadowMap.enabled = true;
-
+        renderer.shadowMap.type = PCFSoftShadowMap;
         return renderer;
     }
 
@@ -68,7 +70,7 @@ export class SceneManager {
 
     setupControls() {
         const controls = new OrbitControls(this.camera, this.domContainer);
-        controls.maxPolarAngle = Math.PI/2-.1;
+        controls.maxPolarAngle = Math.PI / 2 - .1;
         controls.update();
         return controls;
     }
@@ -84,7 +86,7 @@ export class SceneManager {
         return new Scenery(scene);
     }
 
-    setupPatio(scene:Scene) {
+    setupPatio(scene: Scene) {
         return new Patio(scene);
     }
 

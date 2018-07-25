@@ -22,7 +22,7 @@ export default class Scenery {
     private fragmentShader: string = "uniform vec3 topColor;uniform vec3 bottomColor;uniform float offset;uniform float exponent;varying vec3 vWorldPosition;void main() {float h = normalize( vWorldPosition + offset ).y;gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );}"
 
     constructor(scene: Scene) {
-        this.groundGeo = new PlaneBufferGeometry(100000, 100000);
+        this.groundGeo = new PlaneBufferGeometry(300, 300);
         this.groundMat = new MeshPhongMaterial({color: 0xffffff, specular: 0xffffff});
         this.groundMat.color.setHSL(1.22, 0.39, 0.49);
         this.groundMat.specular.set(0);
@@ -37,29 +37,31 @@ export default class Scenery {
 
     private sceneLights(scene: Scene): void {
         this.hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.6);
-        this.hemiLightHelper = new HemisphereLightHelper(this.hemiLight, 10);
+        this.hemiLightHelper = new HemisphereLightHelper(this.hemiLight, 1);
         this.dirLight = new DirectionalLight(0xffffff, 1);
-        this.dirLightHelper = new DirectionalLightHelper(this.dirLight, 10);
+        this.dirLightHelper = new DirectionalLightHelper(this.dirLight, 1);
         this.hemiLight.color.setHSL(0.6, 1, 0.6);
         this.hemiLight.groundColor.setHSL(0.095, 1, 0.75);
-        this.hemiLight.position.set(0, 50, 0);
+        this.hemiLight.position.set(0, 1, 0);
+
         this.dirLight.color.setHSL(0.1, 1, 0.95);
-        this.dirLight.position.set(1, 3, 1);
-        this.dirLight.position.multiplyScalar(30);
+        this.dirLight.position.set(3, 10, 3);
+        //this.dirLight.position.multiplyScalar(30);
         this.dirLight.castShadow = true;
+        this.dirLight.name = "sunLight";
         this.dirLight.shadow.mapSize.width = 2048;
         this.dirLight.shadow.mapSize.height = 2048;
-        const d = 20;
+        const d = 10;
         this.dirLight.shadow.camera.left = -d;
         this.dirLight.shadow.camera.right = d;
         this.dirLight.shadow.camera.top = d;
         this.dirLight.shadow.camera.bottom = -d;
-        this.dirLight.shadow.camera.far = 40;
+        this.dirLight.shadow.camera.far = 100;
         this.dirLight.shadow.bias = -0.0001;
         scene.add(this.hemiLight);
-        scene.add(this.hemiLightHelper);
+        //scene.add(this.hemiLightHelper);
         scene.add(this.dirLight);
-        scene.add(this.dirLightHelper);
+        //scene.add(this.dirLightHelper);
     }
 
     private helper(scene: Scene): void {

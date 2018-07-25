@@ -1,10 +1,9 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-
-import {ThreeContainer} from "./components/ThreeContainer";
+import {App} from "./components/App";
 
 ReactDOM.render(
-    <ThreeContainer id="terraceDesignerContainer"/>,
+    <App/>,
     document.getElementById("app")
 );

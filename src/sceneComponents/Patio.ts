@@ -29,7 +29,7 @@ export class Patio {
     poleHorHeight: number = 14; // cm
     poleHeight: number = 220; // cm
     poleHeightBack: number = 320; // cm
-    terraceColor: string = "#d2d2d2"; // cm
+    color: number = 0xd2d2d2; // cm
     windowsPerSlot: number = 3; // cm
     windowDepth: number = 1; // cm
     windowHeight: number = this.poleHeight; // cm
@@ -38,7 +38,8 @@ export class Patio {
 
     constructor(scene: Scene) {
         this.base = new PatioBase(scene);
-        this.canopy = new Canopy(scene, this.width, this.height, this.length);
+        this.canopy = new Canopy(scene, this.width, this.height, this.length,this.color);
+        this.canopy.color = this.color;
     }
 
     update(): void {
