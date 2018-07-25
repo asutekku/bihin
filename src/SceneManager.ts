@@ -20,7 +20,7 @@ export class SceneManager {
     };
     private controls: OrbitControls;
     private domContainer = document.getElementById("terraceDesignerContainer")!;
-    private patio: Patio;
+    static patio: Patio;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -34,7 +34,7 @@ export class SceneManager {
         this.controls = this.setupControls();
         //this.sceneSubjects = this.createSceneSubjects(this.scene);
         this.scenery = this.setupScenery(this.scene);
-        this.patio = this.setupPatio(this.scene);
+        SceneManager.patio = this.setupPatio(this.scene);
         this.clock = new Clock();
     }
 

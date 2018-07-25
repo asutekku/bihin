@@ -1,4 +1,5 @@
 import * as React from "react";
+import {SceneManager} from "../../SceneManager";
 
 export interface RangeSliderProps {
     title: string;
@@ -7,22 +8,26 @@ export interface RangeSliderProps {
     default: number;
     step: number;
     id: string;
+    target: any;
 }
 
 // 'HelloProps' describes the shape of props.
 // State is never set so we use the '{}' type.
-export class RangeSlider extends React.Component<RangeSliderProps, { value: number }> {
+export class RangeSlider extends React.Component<RangeSliderProps, { value: number, target: number }> {
     constructor(props: any) {
         super(props);
         this.state = {
-            value: this.props.default
+            value: this.props.default,
+            target: this.props.target
         };
     }
 
     handleChange = (event: any) => {
         this.setState({
-            value: event.target.value
+            value: event.target.value,
+            target: parseInt(event.target.value)
         });
+        this.props.target(event.target.value)
     };
 
     render() {

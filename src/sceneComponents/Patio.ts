@@ -4,12 +4,39 @@ import {Canopy} from "./Canopy";
 
 export class Patio {
 
+    get width(): number {
+        return this._width;
+    }
+
+    set width(value: number) {
+        this.base.width = value;
+        this._width = value;
+    }
+
+    get height(): number {
+        return this._height;
+    }
+
+    set height(value: number) {
+        this.base.height = value;
+        this._height = value;
+    }
+
+    get length(): number {
+        return this._length;
+    }
+
+    set length(value: number) {
+        this.base.length = value;
+        this._length = value;
+    }
+
     base: PatioBase;
     canopy: Canopy;
 
-    length: number = 3;
-    width: number = 3;
-    height: number = 0.2;
+    private _length: number = 3;
+    private _width: number = 3;
+    private _height: number = 0.2;
 
     showFences: boolean = false;
     showFencesFront: boolean = true;
@@ -38,7 +65,7 @@ export class Patio {
 
     constructor(scene: Scene) {
         this.base = new PatioBase(scene);
-        this.canopy = new Canopy(scene, this.width, this.height, this.length,this.color);
+        this.canopy = new Canopy(scene, this._width, this._height, this._length, this.color);
         this.canopy.color = this.color;
     }
 

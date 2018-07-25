@@ -16,8 +16,8 @@ export class App extends React.Component {
     render() {
         return (
             <div className={"app-container"}>
-                <SideBar compiler={"asd"} framework={"asd"}/>
-                <ThreeContainer id="terraceDesignerContainer"/>
+                <SideBar/>
+                <ThreeContainer id={"terraceDesignerContainer"}/>
             </div>
         );
     }

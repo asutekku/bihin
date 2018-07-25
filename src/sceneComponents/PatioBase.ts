@@ -1,4 +1,4 @@
-import {BoxGeometry, Mesh, MeshPhongMaterial} from "three";
+import {BoxGeometry, Mesh, MeshPhongMaterial, Scene} from "three";
 
 export class PatioBase {
     get height(): number {
@@ -32,18 +32,21 @@ export class PatioBase {
     private _width: number = 3;
     private _length: number = 3;
     private _height: number = 0.2;
-    material: THREE.MeshPhongMaterial;
-    mesh: THREE.Mesh;
+    material: MeshPhongMaterial;
+    mesh: Mesh;
 
 
-    constructor(scene: THREE.Scene) {
-        const geometry = new BoxGeometry(this._width, this._height, this._length);
+    constructor(scene: Scene) {
+        const geometry = new BoxGeometry(1, 1, 1);
         geometry.translate(0, this._height / 2, 0);
         this.material = new MeshPhongMaterial({color: "#826B50"});
         this.material.specular.set(0);
         this.mesh = new Mesh(geometry, this.material);
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
+        this.mesh.scale.x = this._width;
+        this.mesh.scale.y = this._height;
+        this.mesh.scale.z = this._length;
         scene.add(this.mesh);
     }
 
