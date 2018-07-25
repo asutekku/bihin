@@ -177,81 +177,7 @@ class PatioBuilder {
     /**
      * TODO: Fix poles appearing at wrong places
      */
-    private static canopy(): void {
-        this.sidePoles = 2;
-        this.frontPoles = 2;
-        const x = this.patioDepth / 2 - this.poleWidth / 2,
-            y = this.patioWidth / 2 - this.poleWidth / 2,
-            frontLeft = this.pole(x, y, this.poleHeight),
-            frontRight = this.pole(x, -y, this.poleHeight),
-            backLeft = this.pole(-x, y, this.poleHeightBack),
-            backRight = this.pole(-x, -y, this.poleHeightBack),
-            horizontalBarLeft = this.ceilingPole(x + this.poleWidth / 2, y, this.patioDepth, -90),
-            horizontalBarRight = this.ceilingPole(x + this.poleWidth / 2, -y, this.patioDepth, -90),
-            horizontalBarFront = this.ceilingPole(x, -y - this.poleWidth * 1.5, this.patioWidth + this.poleWidth * 2, 0),
-            horizontalBarBackTop = this.ceilingPole(-x, -y - this.poleWidth * 1.5, this.patioWidth + this.poleWidth * 2, 0, this.poleHeightBack);
-        TerraceDesigner.scene.add(frontLeft);
-        TerraceDesigner.scene.add(frontRight);
-        TerraceDesigner.scene.add(backLeft);
-        TerraceDesigner.scene.add(backRight);
-        TerraceDesigner.scene.add(horizontalBarLeft);
-        TerraceDesigner.scene.add(horizontalBarRight);
-        TerraceDesigner.scene.add(horizontalBarFront);
-        TerraceDesigner.scene.add(horizontalBarBackTop);
-        if (this.patioWidthCount % 2 && 0) {
-            this.windowsPerSlot = 2;
-        } else {
-            this.windowsPerSlot = 3;
-        }
 
-        //Front bars
-        for (let i = 0; i <= this.patioWidthCount; i++) {
-            if (i !== 0 && i !== this.patioWidthCount) {
-                this.windowsPerSlot = 2;
-                const polePosition = (-this.patioBaseWidth) * i + this.poleWidth / 2;
-                if (i % 2 === 0 && this.patioWidthCount % 2 === 0 && this.patioWidthCount % 3 !== 0) {
-                    this.frontPoles++;
-                    const pole = this.pole(x, y + polePosition, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
-                } else if (i % 3 == 0 && this.patioWidthCount % 3 === 0) {
-                    this.frontPoles++;
-                    const pole = this.pole(x, y + polePosition, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
-                } else if (i % 3 == 0 && i % 2 == 0 && this.patioWidthCount % 3 === 0) {
-                    this.frontPoles++;
-                    const pole = this.pole(x, y + polePosition, this.poleHeight);
-                    TerraceDesigner.scene.add(pole);
-                }
-            }
-        }
-
-        //Side bars
-        for (let i = 0; i <= this.patioDepthCount; i++) {
-            if (i !== 0 && i !== this.patioDepthCount) {
-                this.windowsPerSlot = 2;
-                const polePosition = (-this.patioBaseWidth) * i + this.poleWidth / 2;
-                if (i % 2 === 0 && this.patioDepthCount % 2 === 0 && this.patioDepthCount % 3 !== 0) {
-                    this.sidePoles++;
-                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                    TerraceDesigner.scene.add(poleLeft);
-                    TerraceDesigner.scene.add(poleRight);
-                } else if (i % 3 == 0 && this.patioDepthCount % 3 === 0) {
-                    this.sidePoles++;
-                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                    TerraceDesigner.scene.add(poleLeft);
-                    TerraceDesigner.scene.add(poleRight);
-                } else if (i % 3 == 0 && i % 2 == 0 && this.patioDepthCount % 3 === 0) {
-                    this.sidePoles++;
-                    const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                    const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                    TerraceDesigner.scene.add(poleLeft);
-                    TerraceDesigner.scene.add(poleRight);
-                }
-            }
-        }
-    }
 
     private static windows() {
         /**
@@ -339,32 +265,7 @@ class PatioBuilder {
         return fence;
     }
 
-    private static pole(x: number, y: number, height: number, color?: string): THREE.Mesh {
-        const geometry = new THREE.BoxGeometry(this.poleWidth, height, this.poleWidth);
-        let material = new THREE.MeshPhongMaterial({color: this.terraceColor});
-        material.color.setHSL(2.55, 2.55, 2.55);
-        let pole = new THREE.Mesh(geometry, material);
-        pole.geometry.translate(0, height / 2, 0);
-        pole.castShadow = true;
-        pole.receiveShadow = true;
-        pole.position.set(x, 0, y);
-        PatioBuilder.patioElements.push(pole);
-        return pole;
-    }
 
-    private static ceilingPole(x: number, y: number, length: number, rot?: number, verPlus?: number): THREE.Mesh {
-        const geometry = new THREE.BoxGeometry(this.poleWidth, this.poleWidth, length);
-        let material = new THREE.MeshPhongMaterial({color: this.terraceColor});
-        material.color.setHSL(2.55, 2.55, 2.55);
-        let pole = new THREE.Mesh(geometry, material);
-        pole.geometry.translate(0, this.poleWidth / 2, length / 2); // Set's the origin to the bottom of the pole
-        pole.castShadow = true;
-        pole.receiveShadow = true;
-        pole.position.set(x, (verPlus ? this.poleHeightBack : this.poleHeight), y);
-        if (rot) pole.rotateY(Util.toRad(rot));
-        PatioBuilder.patioElements.push(pole);
-        return pole;
-    }
 
     private static window(x: number, y: number, width: number, rot?: number, height?: number): THREE.Mesh {
         const geometry = new THREE.BoxGeometry(this.windowDepth, height ? height : this.poleHeight, width);

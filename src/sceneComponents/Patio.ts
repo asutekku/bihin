@@ -1,9 +1,11 @@
 import {Mesh, Scene} from "three";
 import {PatioBase} from "./PatioBase";
+import {Canopy} from "./Canopy";
 
 export class Patio {
 
     base: PatioBase;
+    canopy: Canopy;
 
     length: number = 3;
     width: number = 3;
@@ -36,9 +38,10 @@ export class Patio {
 
     constructor(scene: Scene) {
         this.base = new PatioBase(scene);
+        this.canopy = new Canopy(scene, this.width, this.height, this.length);
     }
 
-    update():void {
+    update(): void {
 
     }
 }
