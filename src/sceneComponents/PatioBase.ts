@@ -1,13 +1,25 @@
-import {BoxGeometry, Mesh, MeshPhongMaterial, Scene} from "three";
+import { BoxGeometry, Mesh, MeshPhongMaterial, Object3D, Scene } from "three";
 
 export class PatioBase {
+    private scene: Scene;
+
     get height(): number {
         return this._height;
     }
 
     set height(value: number) {
         this._height = value;
-        this.mesh.scale.y = value;
+        this.scene.remove(this.mesh);
+        this.geometry.dispose();
+        this.geometry = new BoxGeometry(1, 1, 1);
+        this.geometry.translate(0, value / 2, 0);
+        this.mesh = new Mesh(this.geometry, this.material);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        this.mesh.scale.xPos = this._width;
+        this.mesh.scale.yPos = this._height;
+        this.mesh.scale.zPos = this._length;
+        this.scene.add(this.mesh);
     }
 
     get length(): number {
@@ -16,17 +28,16 @@ export class PatioBase {
 
     set length(value: number) {
         this._length = value;
-        this.mesh.scale.z = value;
+        this.mesh.scale.zPos = value;
     }
 
     get width(): number {
-
         return this._width;
     }
 
     set width(value: number) {
         this._width = value;
-        this.mesh.scale.x = value;
+        this.mesh.scale.xPos = value;
     }
 
     private _width: number = 3;
@@ -34,27 +45,26 @@ export class PatioBase {
     private _height: number = 0.2;
     material: MeshPhongMaterial;
     mesh: Mesh;
-
+    geometry: BoxGeometry;
 
     constructor(scene: Scene) {
-        const geometry = new BoxGeometry(1, 1, 1);
-        geometry.translate(0, this._height / 2, 0);
-        this.material = new MeshPhongMaterial({color: "#826B50"});
+        this.scene = scene;
+        this.geometry = new BoxGeometry(1, 1, 1);
+        this.geometry.translate(0, this._height / 2, 0);
+        this.material = new MeshPhongMaterial({ color: "#826B50" });
         this.material.specular.set(0);
-        this.mesh = new Mesh(geometry, this.material);
+        this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
-        this.mesh.scale.x = this._width;
-        this.mesh.scale.y = this._height;
-        this.mesh.scale.z = this._length;
+        this.mesh.scale.xPos = this._width;
+        this.mesh.scale.yPos = this._height;
+        this.mesh.scale.zPos = this._length;
         scene.add(this.mesh);
     }
 
     color(color: THREE.Color) {
         this.material.color = color;
     }
-
-
 }
 
 /*

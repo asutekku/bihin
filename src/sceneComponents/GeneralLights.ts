@@ -1,4 +1,4 @@
-import {PointLight, Scene} from "three";
+import { PointLight, Scene } from "three";
 
 export default class GeneralLights {
     scene: Scene;

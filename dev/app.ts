@@ -1,6 +1,5 @@
 const canvas = document.getElementById("terraceDesignerContainer");
 
-
 class TerraceDesigner {
     static scene: THREE.Scene;
     static camera: THREE.PerspectiveCamera;
@@ -48,8 +47,6 @@ class TerraceDesigner {
         TerraceDesigner.rayCaster = new THREE.Raycaster();
     }
 }
-
-
 
 class PatioBuilder {
     static patioElements: THREE.Mesh[] = [];
@@ -173,11 +170,9 @@ class PatioBuilder {
         }
     }
 
-
     /**
      * TODO: Fix poles appearing at wrong places
      */
-
 
     private static windows() {
         /**
@@ -224,23 +219,23 @@ class PatioBuilder {
             //this.patioWidth / 2 - frontWindowWidth / 2 + this.poleWidth
         }
         // Windows left
-        const y = (-this.patioDepth / 2 - this.poleWidth / 2);
+        const y = -this.patioDepth / 2 - this.poleWidth / 2;
         for (let j = 0; j < slotCountSide; j++) {
             const x = this.patioWidth / 2 - this.poleWidth / 1.5;
-            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + (this.poleWidth * 1.5), sideWindowWidth);
+            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + this.poleWidth * 1.5, sideWindowWidth);
             //this.patioWidth / 2 - frontWindowWidth / 2 + this.poleWidth
         }
         //Windows right
         for (let j = 0; j < slotCountSide; j++) {
             const x = -(this.patioWidth / 2 - this.poleWidth / 1.5);
-            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + (this.poleWidth * 1.5), sideWindowWidth);
+            slotSide(x, y + j * (sideSlotWidth + this.poleWidth) + this.poleWidth * 1.5, sideWindowWidth);
             //this.patioWidth / 2 - frontWindowWidth / 2 + this.poleWidth
         }
     }
 
     private static base(x: number, y: number): THREE.Mesh {
         const geometry = new THREE.BoxGeometry(this.patioBaseWidth, this.patioBaseHeight, this.patioBaseWidth);
-        let material = new THREE.MeshPhongMaterial({color: "#826B50"});
+        let material = new THREE.MeshPhongMaterial({ color: "#826B50" });
         //material.color.setHSL(0.32, 0.23, 0.42);
         material.specular.set(0);
         let base = new THREE.Mesh(geometry, material);
@@ -253,7 +248,7 @@ class PatioBuilder {
 
     private static fence(x: number, y: number, rot?: number, height?: number): THREE.Mesh {
         const geometry = new THREE.BoxGeometry(this.fenceDepth, height ? height : this.fenceHeight, this.patioBaseWidth);
-        let material = new THREE.MeshPhongMaterial({color: this.terraceColor});
+        let material = new THREE.MeshPhongMaterial({ color: this.terraceColor });
         material.color.setHSL(2.55, 2.55, 2.55);
         let fence = new THREE.Mesh(geometry, material);
         fence.geometry.translate(0, (height ? height : this.fenceHeight) / 2, 0);
@@ -265,11 +260,9 @@ class PatioBuilder {
         return fence;
     }
 
-
-
     private static window(x: number, y: number, width: number, rot?: number, height?: number): THREE.Mesh {
         const geometry = new THREE.BoxGeometry(this.windowDepth, height ? height : this.poleHeight, width);
-        let material = new THREE.MeshLambertMaterial({color: "#b8bfc6", transparent: true, opacity: 0.5});
+        let material = new THREE.MeshLambertMaterial({ color: "#b8bfc6", transparent: true, opacity: 0.5 });
         let window = new THREE.Mesh(geometry, material);
         window.geometry.translate(0, (height ? height : this.poleHeight) / 2, width / 2);
         window.castShadow = false;

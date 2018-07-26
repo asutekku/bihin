@@ -1,7 +1,6 @@
-import {SceneManager} from './SceneManager';
+import { SceneManager } from "./SceneManager";
 
 export class ThreeEntryPoint {
-
     static init(container: HTMLDivElement) {
         const canvas: HTMLCanvasElement = createCanvas(document, container);
         const sceneManager: SceneManager = new SceneManager(canvas);
@@ -13,7 +12,7 @@ export class ThreeEntryPoint {
         render();
 
         function createCanvas(document: Document, container: HTMLElement) {
-            const canvas = document.createElement('canvas');
+            const canvas = document.createElement("canvas");
             container.appendChild(canvas);
             return canvas;
         }
@@ -25,8 +24,8 @@ export class ThreeEntryPoint {
         }
 
         function resizeCanvas() {
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
 
             canvas.width = canvas.offsetWidth;
             canvas.height = canvas.offsetHeight;
@@ -34,10 +33,10 @@ export class ThreeEntryPoint {
             canvasHalfWidth = Math.round(canvas.offsetWidth / 2);
             canvasHalfHeight = Math.round(canvas.offsetHeight / 2);
 
-            sceneManager.onWindowResize()
+            sceneManager.onWindowResize();
         }
 
-        function mouseMove({screenX, screenY}: { screenX: number, screenY: number }) {
+        function mouseMove({ screenX, screenY }: { screenX: number; screenY: number }) {
             sceneManager.onMouseMove(screenX - canvasHalfWidth, screenY - canvasHalfHeight);
         }
 
@@ -46,6 +45,4 @@ export class ThreeEntryPoint {
             sceneManager.update();
         }
     }
-
 }
-

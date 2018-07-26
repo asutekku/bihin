@@ -1,7 +1,5 @@
-import {Patio} from "../sceneComponents/Patio";
-
 export class PatioControls {
-    static setTerraceValueControls(patio: Patio): void {
+    /*static setTerraceValueControls(patio: Patio): void {
         const terraceWidthDom = <HTMLInputElement>document.getElementById("terraceWidth");
         const terraceDepthDom = <HTMLInputElement>document.getElementById("terraceDepth");
         const terraceShowFences = <HTMLInputElement>document.getElementById("showFences");
@@ -116,5 +114,5 @@ export class PatioControls {
             patio.fenceHeightRight = parseInt(fenceHeightRight.value);
             patio.update();
         });
-    }
+    }*/
 }

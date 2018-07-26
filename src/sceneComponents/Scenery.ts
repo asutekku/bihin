@@ -1,6 +1,11 @@
 import {
     AxesHelper,
-    BackSide, Color, DirectionalLight, DirectionalLightHelper, HemisphereLight, HemisphereLightHelper,
+    BackSide,
+    Color,
+    DirectionalLight,
+    DirectionalLightHelper,
+    HemisphereLight,
+    HemisphereLightHelper,
     Mesh,
     MeshPhongMaterial,
     PlaneBufferGeometry,
@@ -18,18 +23,18 @@ export default class Scenery {
     private hemiLightHelper: HemisphereLightHelper | undefined;
     private dirLightHelper: DirectionalLightHelper | undefined;
 
-    private vertexShader: string = "varying vec3 vWorldPosition;void main() {vec4 worldPosition = modelMatrix * vec4( position, 1.0 );vWorldPosition = worldPosition.xyz;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}"
-    private fragmentShader: string = "uniform vec3 topColor;uniform vec3 bottomColor;uniform float offset;uniform float exponent;varying vec3 vWorldPosition;void main() {float h = normalize( vWorldPosition + offset ).y;gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );}"
+    private vertexShader: string = "varying vec3 vWorldPosition;void main() {vec4 worldPosition = modelMatrix * vec4( position, 1.0 );vWorldPosition = worldPosition.xyz;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}";
+    private fragmentShader: string = "uniform vec3 topColor;uniform vec3 bottomColor;uniform float offset;uniform float exponent;varying vec3 vWorldPosition;void main() {float h = normalize( vWorldPosition + offset ).y;gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );}";
 
     constructor(scene: Scene) {
         this.groundGeo = new PlaneBufferGeometry(300, 300);
-        this.groundMat = new MeshPhongMaterial({color: 0xffffff, specular: 0xffffff});
+        this.groundMat = new MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff });
         this.groundMat.color.setHSL(1.22, 0.39, 0.49);
         this.groundMat.specular.set(0);
         this.ground = new Mesh(this.groundGeo, this.groundMat);
         this.ground.receiveShadow = true;
-        this.ground.rotation.x -= Math.PI / 2;
-        this.ground.position.y = 0;
+        this.ground.rotation.xPos -= Math.PI / 2;
+        this.ground.position.yPos = 0;
         this.sceneLights(scene);
         this.addSkydome(scene);
         scene.add(this.ground);
@@ -75,13 +80,12 @@ export default class Scenery {
         scene.add(axesHelper);
     }
 
-
     private addSkydome(scene: Scene): void {
         const uniforms = {
-            topColor: {value: new Color(0x0077ff)},
-            bottomColor: {value: new Color(0xffffff)},
-            offset: {value: 33},
-            exponent: {value: 0.6}
+            topColor: { value: new Color(0x0077ff) },
+            bottomColor: { value: new Color(0xffffff) },
+            offset: { value: 33 },
+            exponent: { value: 0.6 }
         };
         uniforms.topColor.value.copy(this.hemiLight!.color);
         // TerraceDesigner.scene.fog.color.copy( uniforms.bottomColor.value );

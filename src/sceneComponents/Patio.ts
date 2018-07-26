@@ -1,16 +1,33 @@
-import {Mesh, Scene} from "three";
-import {PatioBase} from "./PatioBase";
-import {Canopy} from "./Canopy";
+import { Mesh, Scene } from "three";
+import { PatioBase } from "./PatioBase";
+import { Canopy } from "./Canopy";
 
 export class Patio {
+    get canopyRaiseHeight(): number {
+        return this._canopyRaiseHeight;
+    }
+
+    set canopyRaiseHeight(value: number) {
+        this._canopyRaiseHeight = value;
+        this.canopy.raiseHeight = this._canopyRaiseHeight;
+    }
+
+    get canopyHeight(): number {
+        return this._canopyHeight;
+    }
+
+    set canopyHeight(value: number) {
+        this._canopyHeight = value;
+        this.canopy.height = this._canopyHeight;
+    }
 
     get width(): number {
         return this._width;
     }
 
     set width(value: number) {
-        this.base.width = value;
         this._width = value;
+        this.base.width = this._width;
     }
 
     get height(): number {
@@ -18,8 +35,9 @@ export class Patio {
     }
 
     set height(value: number) {
-        this.base.height = value;
         this._height = value;
+        this.base.height = this._height;
+        this.canopy.baseHeight = this._height;
     }
 
     get length(): number {
@@ -27,8 +45,8 @@ export class Patio {
     }
 
     set length(value: number) {
-        this.base.length = value;
         this._length = value;
+        this.base.length = this._length;
     }
 
     base: PatioBase;
@@ -54,22 +72,23 @@ export class Patio {
 
     poleWidth: number = 9; // cm
     poleHorHeight: number = 14; // cm
-    poleHeight: number = 220; // cm
+
+    private _canopyHeight: number = 220; // cm
+    private _canopyRaiseHeight: number = 80; // cm
+
     poleHeightBack: number = 320; // cm
     color: number = 0xd2d2d2; // cm
     windowsPerSlot: number = 3; // cm
     windowDepth: number = 1; // cm
-    windowHeight: number = this.poleHeight; // cm
+    windowHeight: number = this._canopyHeight; // cm
     sidePoles: number = 2; // cm
     frontPoles: number = 2; // cm
 
     constructor(scene: Scene) {
         this.base = new PatioBase(scene);
-        this.canopy = new Canopy(scene, this._width, this._height, this._length, this.color);
+        this.canopy = new Canopy(scene, this._width, this._canopyHeight, this._length, this.color);
         this.canopy.color = this.color;
     }
 
-    update(): void {
-
-    }
+    update(): void {}
 }

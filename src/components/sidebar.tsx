@@ -9,9 +9,11 @@ export interface SideBarProps {
 
 export class SideBar extends React.Component<SideBarProps, {}> {
 
-    updateWidth = (value: any) => SceneManager.patio.width = value;
-    updateHeight = (value: any) => SceneManager.patio.height = value;
-    updateLength = (value: any) => SceneManager.patio.length = value;
+    updateWidth = (value: string) => SceneManager.patio.width = parseFloat(value);
+    updateHeight = (value: string) => SceneManager.patio.height = parseFloat(value);
+    updateLength = (value: string) => SceneManager.patio.length = parseFloat(value);
+    updateCanopyHeight = (value: string) => SceneManager.patio.canopyHeight = parseFloat(value);
+    updateCanopyHeightRaise = (value: string) => SceneManager.patio.canopyRaiseHeight = parseFloat(value);
 
     render() {
         return <div className={"sidebar"}>
@@ -20,7 +22,7 @@ export class SideBar extends React.Component<SideBarProps, {}> {
                              target={this.updateWidth}/>
                 <RangeSlider title={"Pituus"} step={1} min={3} max={12} default={3} id={"patioLength"}
                              target={this.updateLength}/>
-                <RangeSlider title={"Korkeus"} step={0.01} min={0.02} max={1} default={0.2} id={"patioHeight"}
+                <RangeSlider title={"Korkeus"} step={0.05} min={0.05} max={1} default={0.2} id={"patioHeight"}
                              target={this.updateHeight}/>
             </ListItem>
             <ListItem text={"Katos"}>
@@ -29,9 +31,9 @@ export class SideBar extends React.Component<SideBarProps, {}> {
                     checked={true}
                     id={"showCanopy"}/>
                 <RangeSlider title={"Korkeus"} step={0.1} min={1.8} max={3} default={2.2} id={"canopyHeight"}
-                             target={this.updateWidth}/>
+                             target={this.updateCanopyHeight}/>
                 <RangeSlider title={"Takaosan korkeus"} step={0.1} min={2.4} max={4} default={3} id={"canopyHeightBack"}
-                             target={this.updateWidth}/>
+                             target={this.updateCanopyHeightRaise}/>
             </ListItem>
             <ListItem text={"Ikkunat ja ovet"}>
                 <CheckBox title={"Näytä"} checked={false} id={"showWindows"}/>
