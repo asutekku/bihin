@@ -2,7 +2,6 @@ import * as React from "react";
 import {ThreeContainer} from "./ThreeContainer";
 import {SideBar} from "./sidebar";
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons'
 import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
 

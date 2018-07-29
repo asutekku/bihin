@@ -33,8 +33,8 @@ export default class Scenery {
         this.groundMat.specular.set(0);
         this.ground = new Mesh(this.groundGeo, this.groundMat);
         this.ground.receiveShadow = true;
-        this.ground.rotation.xPos -= Math.PI / 2;
-        this.ground.position.yPos = 0;
+        this.ground.rotation.x -= Math.PI / 2;
+        this.ground.position.y = 0;
         this.sceneLights(scene);
         this.addSkydome(scene);
         scene.add(this.ground);

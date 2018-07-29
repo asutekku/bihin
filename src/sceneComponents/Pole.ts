@@ -3,7 +3,7 @@ import { BoxGeometry, Color, Mesh, MeshPhongMaterial, Object3D, Scene } from "th
 export class Pole {
     poleMesh: Mesh;
     private poleMat: MeshPhongMaterial;
-    private poleGeom: BoxGeometry;
+    poleGeom: BoxGeometry;
     private width: number;
     private height: number;
     private length: number;
@@ -29,9 +29,9 @@ export class Pole {
         this.poleMesh = new Mesh(this.poleGeom, this.poleMat);
         this.poleMesh.scale.set(this.width, this.height, this.width);
         this.poleMesh.position.set(xPos ? xPos : 0, yPos ? yPos : 0, zPos ? zPos : 0);
-        if (rotX) this.poleMesh.rotateY(rotX * Math.PI / 180);
+        if (rotX) this.poleMesh.rotateX(rotX * Math.PI / 180);
         if (rotY) this.poleMesh.rotateY(rotY * Math.PI / 180);
-        if (rotZ) this.poleMesh.rotateY(rotZ * Math.PI / 180);
+        if (rotZ) this.poleMesh.rotateZ(rotZ * Math.PI / 180);
         this.poleMesh.castShadow = true;
         this.poleMesh.receiveShadow = true;
     }
@@ -41,7 +41,7 @@ export class Pole {
     }
 
     scale(x: number, y: number, z: number): void {
-        this.poleMesh.scale.set(this.width, this.height, this.width);
+        this.poleMesh.scale.set(x, y, z);
     }
 
     set x(position: number) {
@@ -80,8 +80,8 @@ export class Pole {
         this.poleMesh.scale.z = scale;
     }
 
-    set color(color: Color) {
-        this.poleMat.color = color;
+    set color(color: number) {
+        this.poleMat.color = new Color(color);
     }
 
     addTo(scene: Scene) {

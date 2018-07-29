@@ -28,7 +28,8 @@ export class Patio {
     set width(value: number) {
         this._width = value;
         this.base.width = this._width;
-    }
+        this.canopy.width = this._width;
+}
 
     get height(): number {
         return this._height;
@@ -47,6 +48,7 @@ export class Patio {
     set length(value: number) {
         this._length = value;
         this.base.length = this._length;
+        this.canopy.length = this._length;
     }
 
     base: PatioBase;
@@ -61,10 +63,10 @@ export class Patio {
     showFencesRight: boolean = true;
     showFencesLeft: boolean = true;
     evenFenceHeight: boolean = true;
-    fenceHeight: number = 80; // cm
-    fenceHeightLeft: number = 80; // cm
-    fenceHeightFront: number = 80; // cm
-    fenceHeightRight: number = 80; // cm
+    fenceHeight: number = 0.80; // cm
+    fenceHeightLeft: number = 0.80; // cm
+    fenceHeightFront: number = 0.80; // cm
+    fenceHeightRight: number = 0.80; // cm
     fenceDepth: number = 5; // cm
 
     showCanopy: boolean = true;
@@ -73,10 +75,10 @@ export class Patio {
     poleWidth: number = 9; // cm
     poleHorHeight: number = 14; // cm
 
-    private _canopyHeight: number = 220; // cm
-    private _canopyRaiseHeight: number = 80; // cm
+    private _canopyHeight: number = 2.20; // cm
+    private _canopyRaiseHeight: number = 0.80; // cm
 
-    poleHeightBack: number = 320; // cm
+    poleHeightBack: number = 3.20; // cm
     color: number = 0xd2d2d2; // cm
     windowsPerSlot: number = 3; // cm
     windowDepth: number = 1; // cm

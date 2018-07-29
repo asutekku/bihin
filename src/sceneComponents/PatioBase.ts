@@ -1,4 +1,4 @@
-import { BoxGeometry, Mesh, MeshPhongMaterial, Object3D, Scene } from "three";
+import {BoxGeometry, Mesh, MeshPhongMaterial, Object3D, Scene} from "three";
 
 export class PatioBase {
     private scene: Scene;
@@ -9,17 +9,8 @@ export class PatioBase {
 
     set height(value: number) {
         this._height = value;
-        this.scene.remove(this.mesh);
-        this.geometry.dispose();
-        this.geometry = new BoxGeometry(1, 1, 1);
-        this.geometry.translate(0, value / 2, 0);
-        this.mesh = new Mesh(this.geometry, this.material);
-        this.mesh.castShadow = true;
-        this.mesh.receiveShadow = true;
-        this.mesh.scale.xPos = this._width;
-        this.mesh.scale.yPos = this._height;
-        this.mesh.scale.zPos = this._length;
-        this.scene.add(this.mesh);
+        this.mesh.scale.y = this._height;
+        this.mesh.position.y = (this._height / 2)
     }
 
     get length(): number {
@@ -28,7 +19,7 @@ export class PatioBase {
 
     set length(value: number) {
         this._length = value;
-        this.mesh.scale.zPos = value;
+        this.mesh.scale.z = value;
     }
 
     get width(): number {
@@ -37,7 +28,7 @@ export class PatioBase {
 
     set width(value: number) {
         this._width = value;
-        this.mesh.scale.xPos = value;
+        this.mesh.scale.x = value;
     }
 
     private _width: number = 3;
@@ -50,15 +41,15 @@ export class PatioBase {
     constructor(scene: Scene) {
         this.scene = scene;
         this.geometry = new BoxGeometry(1, 1, 1);
-        this.geometry.translate(0, this._height / 2, 0);
-        this.material = new MeshPhongMaterial({ color: "#826B50" });
+        this.material = new MeshPhongMaterial({color: "#826B50"});
         this.material.specular.set(0);
         this.mesh = new Mesh(this.geometry, this.material);
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
-        this.mesh.scale.xPos = this._width;
-        this.mesh.scale.yPos = this._height;
-        this.mesh.scale.zPos = this._length;
+        this.mesh.scale.x = this._width;
+        this.mesh.scale.y = this._height;
+        this.mesh.scale.z = this._length;
+        this.mesh.position.y = (this._height / 2);
         scene.add(this.mesh);
     }
 
