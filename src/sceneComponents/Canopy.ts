@@ -1,19 +1,17 @@
-import {BoxGeometry, Mesh, MeshPhongMaterial, Scene} from "three";
-import {Pole} from "./Pole";
+import { BoxGeometry, Mesh, MeshPhongMaterial, Scene } from "three";
+import { Pole } from "./Pole";
+import { Mathtools } from "../util/Mathtools";
 
 //X is width
 
 export class Canopy {
-
     get length(): number {
         return this._length;
     }
 
     set length(value: number) {
         this._length = value;
-        this.updateScale();
-        this.updatePosition();
-        this.frontBars();
+        this.redraw();
     }
 
     private horizontalBarFront: Pole;
@@ -31,9 +29,7 @@ export class Canopy {
 
     set width(value: number) {
         this._width = value;
-        this.updateScale();
-        this.updatePosition();
-        this.frontBars();
+        this.redraw();
     }
 
     get raiseHeight(): number {
@@ -42,8 +38,7 @@ export class Canopy {
 
     set raiseHeight(value: number) {
         this._raiseHeight = value;
-        this.updateScale();
-        this.updatePosition();
+        this.redraw();
     }
 
     get height(): number {
@@ -52,9 +47,7 @@ export class Canopy {
 
     set height(value: number) {
         this._height = value;
-        this.updateScale();
-        this.updatePosition();
-        this.frontBars();
+        this.redraw();
     }
 
     get baseHeight(): number {
@@ -63,8 +56,7 @@ export class Canopy {
 
     set baseHeight(value: number) {
         this._baseHeight = value;
-        this.updatePosition();
-        this.frontBars();
+        this.redraw();
     }
 
     get color(): number {
@@ -96,12 +88,22 @@ export class Canopy {
     private _baseHeight: number = 0.2;
     private poles: Pole[] = [];
     private front: Pole[] = [];
+    private ceilingPoles: Pole[] = [];
+
+    redraw(): void {
+        this.updateScale();
+        this.updatePosition();
+        this.frontBars();
+        this.ceiling();
+    }
 
     updateScale(): void {
-        this.horizontalBarFront.scaleY = this._width - (this.poleWidth * 2);
-        this.horizontalBarBackTop.scaleY = this._width - (this.poleWidth * 2);
-        this.horizontalBarLeft.scaleY = this._length - (this.poleWidth * 2);
-        this.horizontalBarRight.scaleY = this._length - (this.poleWidth * 2);
+        // noinspection JSSuspiciousNameCombination
+        this.horizontalBarFront.scaleY = this._width;
+        // noinspection JSSuspiciousNameCombination
+        this.horizontalBarBackTop.scaleY = this._width;
+        this.horizontalBarLeft.scaleY = this._length - this.poleWidth * 2;
+        this.horizontalBarRight.scaleY = this._length - this.poleWidth * 2;
         this.frontLeft.scaleY = this._height;
         this.frontRight.scaleY = this._height;
         this.backRight.scaleY = this._raiseHeight;
@@ -111,16 +113,16 @@ export class Canopy {
     updatePosition(): void {
         const x = this._width / 2 - this.poleWidth / 2;
         const z = this._length / 2 - this.poleWidth / 2;
-        const height = this._baseHeight + (this._height / 2);
-        const backHeight = this._baseHeight + ((this._raiseHeight) / 2);
+        const height = this._baseHeight + this._height / 2;
+        const backHeight = this._baseHeight + this._raiseHeight / 2;
         this.frontLeft.position(x, height, z);
         this.frontRight.position(-x, height, z);
         this.backLeft.position(x, backHeight, -z);
         this.backRight.position(-x, backHeight, -z);
-        this.horizontalBarLeft.position(x, this._baseHeight + this._height - (this.poleWidth / 2), 0);
-        this.horizontalBarRight.position(-x, this._baseHeight + this._height - (this.poleWidth / 2), 0);
-        this.horizontalBarFront.position(0, this._baseHeight + this._height - (this.poleWidth / 2), z);
-        this.horizontalBarBackTop.position(0, this._baseHeight + this._raiseHeight - (this.poleWidth / 2), -z);
+        this.horizontalBarLeft.position(x, this._baseHeight + this._height + this.poleWidth / 2, 0);
+        this.horizontalBarRight.position(-x, this._baseHeight + this._height + this.poleWidth / 2, 0);
+        this.horizontalBarFront.position(0, this._baseHeight + this._height + this.poleWidth / 2, z);
+        this.horizontalBarBackTop.position(0, this._baseHeight + this._raiseHeight + this.poleWidth / 2, -z);
     }
 
     constructor(scene: Scene, width: number, height: number, length: number, color: number) {
@@ -134,10 +136,10 @@ export class Canopy {
         this.scene = scene;
         const x = this._width / 2 - this.poleWidth / 2;
         const y = this._length / 2 - this.poleWidth / 2;
-        this.frontLeft = new Pole({xPos: x, yPos: y, height: this.poleHeight});
-        this.frontRight = new Pole({xPos: x, yPos: -y, height: this.poleHeight});
-        this.backLeft = new Pole({xPos: -x, yPos: y, height: this.poleHeightBack});
-        this.backRight = new Pole({xPos: -x, yPos: -y, height: this.poleHeightBack});
+        this.frontLeft = new Pole({ xPos: x, yPos: y, height: this.poleHeight });
+        this.frontRight = new Pole({ xPos: x, yPos: -y, height: this.poleHeight });
+        this.backLeft = new Pole({ xPos: -x, yPos: y, height: this.poleHeightBack });
+        this.backRight = new Pole({ xPos: -x, yPos: -y, height: this.poleHeightBack });
         this.horizontalBarLeft = new Pole({
             xPos: x,
             yPos: 0,
@@ -188,9 +190,9 @@ export class Canopy {
         }
         this.frontBars();
         //this.sidebars(scene, x, y, this._width, this._length);
-        //this.ceiling(scene);
         this.updateScale();
         this.updatePosition();
+        this.ceiling();
     }
 
     private frontBars(): void {
@@ -204,8 +206,8 @@ export class Canopy {
         for (let i = 0; i <= this._width; i++) {
             if (i !== 0 && i !== length) {
                 this.windowsPerSlot = 2;
-                const pole = new Pole({width: this.poleWidth, height: this.height, length: this.poleWidth});
-                pole.position((x + this.poleWidth) - i, this._baseHeight + (this.height / 2), z);
+                const pole = new Pole({ width: this.poleWidth, height: this.height, length: this.poleWidth });
+                pole.position(x + this.poleWidth - i, this._baseHeight + this.height / 2, z);
                 //const pole = this.pole(x, y + polePosition, this.poleHeight);
                 if (i % 2 === 0 && this._width % 2 === 0 && this._width % 3 !== 0) {
                     this.addFrontPole(this.scene, pole);
@@ -240,8 +242,8 @@ export class Canopy {
             if (i !== 0 && i !== length) {
                 this.windowsPerSlot = 2;
                 const polePosition = -width * i + this.poleWidth / 2;
-                const poleLeft = new Pole({xPos: x + polePosition, yPos: y, height: this.poleHeight});
-                const poleRight = new Pole({xPos: x + polePosition, yPos: -y, height: this.poleHeight});
+                const poleLeft = new Pole({ xPos: x + polePosition, yPos: y, height: this.poleHeight });
+                const poleRight = new Pole({ xPos: x + polePosition, yPos: -y, height: this.poleHeight });
                 if (i % 2 === 0 && length % 2 === 0 && length % 3 !== 0) {
                     this.addSidePole(scene, poleLeft, poleRight);
                 } else if (i % 3 == 0 && length % 3 === 0) {
@@ -253,26 +255,30 @@ export class Canopy {
         }
     }
 
-    ceiling(scene: Scene): void {
-        const count: number = Math.round((this._width - this.poleWidth) * 100 / 80),
-            length = Math.sqrt(Math.pow(this._length, 2) + Math.pow(this.poleHeightBack - this.poleHeight, 2)) + 0.1,
-            x = this._length / 2 - this.poleWidth / 2,
-            y = this._width / 2 - this.poleWidth / 2,
-            divide = this._width / count,
-            height = this.poleHeightBack - this.poleHeight,
-            angle: number = Math.asin(height / length);
-        console.log(angle);
+    ceiling(): void {
+        this.ceilingPoles.forEach(pole => {
+            this.scene.remove(pole.poleMesh);
+            pole.poleGeom.dispose();
+            this.poles.splice(this.poles.indexOf(pole), 1);
+        });
+        const count: number = Math.round(this._width * 100 / 80), // Calculates the amount of ceilingpoles
+            length: number = Mathtools.hypotenuse(this._length, this.raiseHeight - this.height), //Basic hypotenuse of height and length
+            x: number = this._width / 2 - this.poleWidth / 2, // Base point to start the addition of poles, left side of the canopy
+            divide: number = (this._width - this.poleWidth) / count, // How large is the spacing between poles
+            height: number = this.raiseHeight - this.height, // Height of the back
+            angle: number = Math.asin(height / length) / Math.PI * 180; // Angle of the ceilingpoles
         for (let i = 0; i < count + 1; i++) {
             const ceilingPole = new Pole({
-                xPos: -x,
-                yPos: y - 1,
-                length: length,
+                xPos: -x + i * divide,
+                yPos: this.height + (this.raiseHeight - this.height) / 2 + this.baseHeight + this.poleWidth * 1.5, // Dark magic to position the poles correctly
+                zPos: 0.1,
                 rotY: 90,
                 rotX: angle,
-                height: this.poleHeight
+                rotZ: 90,
+                height: length + 0.1
             });
-            this.poles.push(ceilingPole);
-            ceilingPole.addTo(scene);
+            this.ceilingPoles.push(ceilingPole);
+            ceilingPole.addTo(this.scene);
         }
         /*const ceilingWindow = this.window(-x, y, this.patioWidth, 180, length);
         ceilingWindow.position.set(-x, this.poleHeightBack + 8, y);
@@ -330,7 +336,7 @@ export class Canopy {
 
     pole(x: number, y: number, height: number, color?: string): Mesh {
         const geometry = new BoxGeometry(this.poleWidth, height, this.poleWidth);
-        let material = new MeshPhongMaterial({color: this._color});
+        let material = new MeshPhongMaterial({ color: this._color });
         material.color.setHSL(2.55, 2.55, 2.55);
         let pole = new Mesh(geometry, material);
         pole.castShadow = true;
@@ -341,7 +347,7 @@ export class Canopy {
 
     ceilingPole(x: number, y: number, length: number, rot?: number, verPlus?: number): Mesh {
         const geometry = new BoxGeometry(this.poleWidth, this.poleWidth, length);
-        let material = new MeshPhongMaterial({color: this._color});
+        let material = new MeshPhongMaterial({ color: this._color });
         material.color.setHSL(2.55, 2.55, 2.55);
         let pole = new Mesh(geometry, material);
         pole.castShadow = true;

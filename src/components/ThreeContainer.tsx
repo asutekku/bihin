@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ThreeEntryPoint} from "../ThreeEntryPoint";
+import { ThreeEntryPoint } from "../ThreeEntryPoint";
 
 export interface ThreeProps {
     id: string;
@@ -13,9 +13,6 @@ export class ThreeContainer extends React.Component<ThreeProps, {}> {
     }
 
     render() {
-        return (
-            <div id={this.props.id} ref={element => this.threeRootElement = element} className="threeContainer"/>
-        );
+        return <div id={this.props.id} ref={element => (this.threeRootElement = element)} className="threeContainer" />;
     }
 }
-

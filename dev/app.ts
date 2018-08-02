@@ -183,8 +183,10 @@ class PatioBuilder {
          */
         const slotCountFront = this.frontPoles - 1;
         const slotCountSide = this.sidePoles - 1;
-        const frontWindowWidth = (this.patioWidth - this.frontPoles * this.poleWidth) / this.windowsPerSlot / slotCountFront;
-        const sideWindowWidth = (this.patioDepth - this.sidePoles * this.poleWidth) / this.windowsPerSlot / slotCountSide;
+        const frontWindowWidth =
+            (this.patioWidth - this.frontPoles * this.poleWidth) / this.windowsPerSlot / slotCountFront;
+        const sideWindowWidth =
+            (this.patioDepth - this.sidePoles * this.poleWidth) / this.windowsPerSlot / slotCountSide;
         const x = this.patioWidth / 2 - this.poleWidth;
         const slotWidth = frontWindowWidth * this.windowsPerSlot;
         const sideSlotWidth = sideWindowWidth * this.windowsPerSlot;
@@ -247,7 +249,11 @@ class PatioBuilder {
     }
 
     private static fence(x: number, y: number, rot?: number, height?: number): THREE.Mesh {
-        const geometry = new THREE.BoxGeometry(this.fenceDepth, height ? height : this.fenceHeight, this.patioBaseWidth);
+        const geometry = new THREE.BoxGeometry(
+            this.fenceDepth,
+            height ? height : this.fenceHeight,
+            this.patioBaseWidth
+        );
         let material = new THREE.MeshPhongMaterial({ color: this.terraceColor });
         material.color.setHSL(2.55, 2.55, 2.55);
         let fence = new THREE.Mesh(geometry, material);

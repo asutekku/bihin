@@ -29,7 +29,7 @@ export class Patio {
         this._width = value;
         this.base.width = this._width;
         this.canopy.width = this._width;
-}
+    }
 
     get height(): number {
         return this._height;
@@ -54,6 +54,32 @@ export class Patio {
     base: PatioBase;
     canopy: Canopy;
 
+    state: any = {
+        patio: {
+            length: 3,
+            width: 3,
+            height: 0.2
+        },
+        fences: {
+            show: <boolean>false,
+            showRight: <boolean>true,
+            showLeft: <boolean>true,
+            showFront: <boolean>true,
+            evenHeight: <boolean>true,
+            heightAll: <number>0.8,
+            heightFront: <number>0.8,
+            heightLeft: <number>0.8,
+            heightRight: <number>0.8,
+            depth: <number>0.05
+        },
+        canopy: {
+            show: true,
+            showWindows: true,
+            height: 2.2,
+            heightBack: 3.0,
+            windowsPerSlow: 3
+        }
+    };
     private _length: number = 3;
     private _width: number = 3;
     private _height: number = 0.2;
@@ -63,10 +89,10 @@ export class Patio {
     showFencesRight: boolean = true;
     showFencesLeft: boolean = true;
     evenFenceHeight: boolean = true;
-    fenceHeight: number = 0.80; // cm
-    fenceHeightLeft: number = 0.80; // cm
-    fenceHeightFront: number = 0.80; // cm
-    fenceHeightRight: number = 0.80; // cm
+    fenceHeight: number = 0.8; // cm
+    fenceHeightLeft: number = 0.8; // cm
+    fenceHeightFront: number = 0.8; // cm
+    fenceHeightRight: number = 0.8; // cm
     fenceDepth: number = 5; // cm
 
     showCanopy: boolean = true;
@@ -75,10 +101,10 @@ export class Patio {
     poleWidth: number = 9; // cm
     poleHorHeight: number = 14; // cm
 
-    private _canopyHeight: number = 2.20; // cm
-    private _canopyRaiseHeight: number = 0.80; // cm
+    private _canopyHeight: number = 2.2; // cm
+    private _canopyRaiseHeight: number = 0.8; // cm
 
-    poleHeightBack: number = 3.20; // cm
+    poleHeightBack: number = 3.2; // cm
     color: number = 0xd2d2d2; // cm
     windowsPerSlot: number = 3; // cm
     windowDepth: number = 1; // cm
