@@ -1,71 +1,187 @@
+///<reference path="../Models/Terrace.ts"/>
 import * as React from "react";
-import { ListItem } from "./list/ListItem";
-import { RangeSlider } from "./list/RangeSlider";
-import { CheckBox } from "./list/CheckBox";
-import { SceneManager } from "../SceneManager";
-import { Patiost } from "../controllers/FileController";
+import {ListItem} from "./list/ListItem";
+import {RangeSlider} from "./list/RangeSlider";
+import {CheckBox} from "./list/CheckBox";
+import {SceneManager} from "../SceneManager";
+import {TerraceState} from "../Models/Terrace";
+import axios from 'axios'
 
-export interface SideBarProps {}
 
-export interface SideBarState {
-    patio: {
-        height: {
-            value: number;
-            min: number;
-            max: number;
-            step: number;
-        };
-        width: {
-            value: number;
-            min: number;
-            max: number;
-            step: number;
-        };
-        length: {
-            value: number;
-            min: number;
-            max: number;
-            step: number;
-        };
-    };
-}
-
-export class SideBar extends React.Component<SideBarProps, SideBarState> {
+export class SideBar extends React.Component<{}, TerraceState> {
     constructor(props: any) {
         super(props);
         this.state = {
+            name: '',
+            author: '',
+            description: '',
             patio: {
-                height: {
-                    value: 0.2,
-                    min: 0.05,
-                    max: 1,
-                    step: 0.05
+                niskajako: '',
+                rakenne: '',
+                sokkelinJaSeinanMittaero: '',
+                rakenneTyyppi: '',
+                materiaali: '',
+                korko: 0,
+                korkoMaasta: '',
+                lisaOtsaLaudat: undefined,
+                korkein: '',
+                jakolaudanKohta: 0,
+                laudoituksenSuunta: '',
+                maanpoisto: undefined,
+                maanPoisvienti: undefined,
+                kuutiomaara: 0,
+                perustus: '',
+                rakennusKangas: undefined,
+                soraa: undefined,
+                leveys: 3,
+                syvyys: 3,
+                korkeus: 0.2,
+            },
+            lasiterassi: {
+                leveys: 3,
+                syvyys: 3,
+                korkeus: 2.2,
+                takaKorkeus: 3,
+                etutolppienLukumaara: 0,
+                runko: {
+                    vari: '',
+                    materiaali: '',
+                    listat: {
+                        vari: ''
+                    },
+                    pellit: {
+                        vari: ''
+                    },
+                    ranni: {
+                        on: undefined,
+                        vari: ''
+                    },
+                    syoksy: {
+                        var: ''
+                    }
                 },
-                width: {
-                    value: 3,
-                    min: 3,
-                    max: 12,
-                    step: 1
+                sivut: {
+                    vasen: {
+                        ovet: {
+                            lukumaara: 0,
+                            puitteet: undefined,
+                            lasinVari: '',
+                            lasinVahvuus: 0,
+                            vaakapuite: undefined,
+                            korkeus: 0
+                        },
+                        kiinteaLasiLkm: 0,
+                        lukkoTyyppi: '',
+                        kaide: {
+                            malli: '',
+                            korkeus: 0
+                        },
+                        muuta: ''
+                    },
+                    etu: {
+                        ovet: {
+                            lukumaara: 0,
+                            puitteet: undefined,
+                            lasinVari: '',
+                            lasinVahvuus: 0,
+                            vaakapuite: undefined,
+                            korkeus: 0
+                        },
+                        kiinteaLasiLkm: 0,
+                        lukkoTyyppi: '',
+                        kaide: {
+                            malli: '',
+                            korkeus: 0
+                        },
+                        muuta: ''
+                    },
+                    oikea: {
+                        ovet: {
+                            lukumaara: 0,
+                            puitteet: undefined,
+                            lasinVari: '',
+                            lasinVahvuus: 0,
+                            vaakapuite: undefined,
+                            korkeus: 0
+                        },
+                        kiinteaLasiLkm: 0,
+                        lukkoTyyppi: '',
+                        kaide: {
+                            malli: '',
+                            korkeus: 0
+                        },
+                        muuta: ''
+                    },
+                    taka: {
+                        ovet: {
+                            lukumaara: 0,
+                            puitteet: undefined,
+                            lasinVari: '',
+                            lasinVahvuus: 0,
+                            vaakapuite: undefined,
+                            korkeus: 0
+                        },
+                        kiinteaLasiLkm: 0,
+                        lukkoTyyppi: '',
+                        kaide: {
+                            malli: '',
+                            korkeus: 0
+                        },
+                        muuta: ''
+                    }
                 },
-                length: {
-                    value: 3,
-                    min: 3,
-                    max: 12,
-                    step: 1
-                }
+                katto: {
+                    niska: {
+                        leveys: 0,
+                        korkeus: 0
+                    },
+                    materiaali: '',
+                    raystas: {
+                        ylitysVasen: 0,
+                        ylitysOikea: 0
+                    }
+                },
+                takaliitosPaalla: undefined,
+                eutliitosPaalla: undefined
             }
         };
     }
 
-    private updateWidth = (value: string) => (SceneManager.patio.width = parseFloat(value));
-    private updateHeight = (value: string) => {
-        this.state.patio.height.value = parseFloat(value);
-        SceneManager.patio.height = this.state.patio.height.value;
+    private updateWidth = (value: string) => {
+        const patio = {...this.state.patio};
+        patio.leveys = parseFloat(value);
+        this.setState({patio});
+        SceneManager.patio.width = parseFloat(value);
     };
-    private updateLength = (value: string) => (SceneManager.patio.length = parseFloat(value));
-    private updateCanopyHeight = (value: string) => (SceneManager.patio.canopyHeight = parseFloat(value));
-    private updateCanopyHeightRaise = (value: string) => (SceneManager.patio.canopyRaiseHeight = parseFloat(value));
-    private printData = () => console.log(JSON.stringify(Patiost.state));
+    private updateHeight = (value: string) => {
+        const patio = {...this.state.patio};
+        patio.korkeus = parseFloat(value);
+        this.setState({patio});
+        SceneManager.patio.height = parseFloat(value);
+    };
+    private updateLength = (value: string) => {
+        const patio = {...this.state.patio};
+        patio.leveys = parseFloat(value);
+        this.setState({patio});
+        SceneManager.patio.length = parseFloat(value);
+    };
+    private updateCanopyHeight = (value: string) => {
+        const lasiterassi = {...this.state.lasiterassi};
+        lasiterassi.korkeus = parseFloat(value);
+        this.setState({lasiterassi});
+        SceneManager.patio.canopyHeight = parseFloat(value);
+    };
+    private updateCanopyHeightRaise = (value: string) => {
+        const lasiterassi = {...this.state.lasiterassi};
+        lasiterassi.takaKorkeus = parseFloat(value);
+        this.setState({lasiterassi});
+        SceneManager.patio.canopyRaiseHeight = parseFloat(value);
+    };
+    private printData = () => {
+        axios.post('http://localhost:3000/terraces', JSON.stringify(this.state)).then((e) => {
+            console.log("POST successful")
+        });
+    };
 
     render() {
         return (
@@ -73,40 +189,40 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
                 <ListItem text={"Patio"}>
                     <RangeSlider
                         title={"Leveys"}
-                        step={this.state.patio.width.step}
-                        min={this.state.patio.width.min}
-                        max={this.state.patio.width.max}
-                        default={this.state.patio.width.value}
+                        step={1}
+                        min={3}
+                        max={9}
+                        default={this.state.patio.leveys}
                         id={"patioWidth"}
                         target={this.updateWidth}
                     />
                     <RangeSlider
-                        title={"Pituus"}
-                        step={this.state.patio.length.step}
-                        min={this.state.patio.length.min}
-                        max={this.state.patio.length.max}
-                        default={this.state.patio.length.value}
+                        title={"Syvyys"}
+                        step={1}
+                        min={3}
+                        max={9}
+                        default={this.state.patio.syvyys}
                         id={"patioLength"}
                         target={this.updateLength}
                     />
                     <RangeSlider
                         title={"Korkeus"}
-                        step={this.state.patio.height.step}
-                        min={this.state.patio.height.min}
-                        max={this.state.patio.height.max}
-                        default={this.state.patio.height.value}
+                        step={0.1}
+                        min={0.1}
+                        max={1}
+                        default={this.state.patio.korkeus}
                         id={"patioHeight"}
                         target={this.updateHeight}
                     />
                 </ListItem>
                 <ListItem text={"Katos"}>
-                    <CheckBox title={"Näytä"} checked={true} id={"showCanopy"} />
+                    <CheckBox title={"Näytä"} checked={true} id={"showCanopy"}/>
                     <RangeSlider
                         title={"Korkeus"}
                         step={0.1}
                         min={1.8}
                         max={3}
-                        default={2.2}
+                        default={this.state.lasiterassi.korkeus}
                         id={"canopyHeight"}
                         target={this.updateCanopyHeight}
                     />
@@ -115,17 +231,16 @@ export class SideBar extends React.Component<SideBarProps, SideBarState> {
                         step={0.1}
                         min={2.4}
                         max={4}
-                        default={3}
+                        default={this.state.lasiterassi.takaKorkeus}
                         id={"canopyHeightBack"}
                         target={this.updateCanopyHeightRaise}
                     />
                 </ListItem>
                 <ListItem text={"Ikkunat ja ovet"}>
-                    z
-                    <CheckBox title={"Näytä"} checked={false} id={"showWindows"} />
+                    <CheckBox title={"Näytä"} checked={false} id={"showWindows"}/>
                 </ListItem>
                 <ListItem text={"Aidat"}>
-                    <CheckBox title={"Näytä"} checked={false} id={"showFences"} />
+                    <CheckBox title={"Näytä"} checked={false} id={"showFences"}/>
                 </ListItem>
                 <button className={"button-basic"} onClick={this.printData}>
                     Tallenna tiedot

@@ -8,18 +8,22 @@ body {
     overflow: hidden;
 }
 
-#terraceDesignerContainer {
+.threeContainer {
     height: 100vh;
-    width: 80vw;
+    width: calc(100vw - 560px);
 }
 
 .sidebar {
-    width: 20vw;
+    width: 280px;
+}
+
+.infobar {
+    width: 280px;
 }
 
 .app-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .hide {
@@ -128,16 +132,21 @@ input[type=range]:focus::-ms-fill-upper {
     width: 100%;
 }
 
-.input-container {
+.input-container, .list-text-container {
     width: 100%;
 }
 
-.input-label {
+.input-label, .list-text-title {
     font-weight: 600;
     font-size: 14px;
 }
 
-.input-value {
+.list-text-container {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.input-value, .list-text-value {
     font-size: 14px;
 }
 
@@ -201,4 +210,5 @@ input[type=range]:focus::-ms-fill-upper {
     text-transform: uppercase;
     font-size: 13px;
     font-weight: 600;
-    font-optical-sizing: revert;}
+    font-optical-sizing: revert;
+}

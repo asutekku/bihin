@@ -4,6 +4,7 @@ import { SideBar } from "./sidebar";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {InfoBar} from "./Infobar";
 
 library.add(faChevronRight);
 library.add(faChevronDown);
@@ -16,6 +17,7 @@ export class App extends React.Component {
             <div className={"app-container"}>
                 <SideBar />
                 <ThreeContainer id={"terraceDesignerContainer"} />
+                <InfoBar />
             </div>
         );
     }
