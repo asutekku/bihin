@@ -2,6 +2,7 @@ export interface TerraceState {
     name: string,
     author: string,
     description: string,
+    image: string,
     patio: {
         niskajako: string
         rakenne: string,

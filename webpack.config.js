@@ -4,6 +4,7 @@ module.exports = {
         filename: "bundle.js",
         path: __dirname + "/dist"
     },
+    mode: 'production',
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
@@ -19,6 +20,14 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 loader: "awesome-typescript-loader"
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader'
+            },
+            {
+                test: /\.s[a|c]ss$/,
+                loader: 'sass-loader!style-loader!css-loader'
             },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.

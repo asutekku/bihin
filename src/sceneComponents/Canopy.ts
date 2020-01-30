@@ -280,59 +280,7 @@ export class Canopy {
             this.ceilingPoles.push(ceilingPole);
             ceilingPole.addTo(this.scene);
         }
-        /*const ceilingWindow = this.window(-x, y, this.patioWidth, 180, length);
-        ceilingWindow.position.set(-x, this.poleHeightBack + 8, y);
-        ceilingWindow.rotateZ(angle + Util.toRad(90));
-        scene.add(ceilingWindow);*/
     }
-
-    /*
-
-//Front bars
-    for (let i = 0; i <= this.patioWidthCount; i++) {
-        if (i !== 0 && i !== this.patioWidthCount) {
-            this.windowsPerSlot = 2;
-            const pole = this.pole(x, y + polePosition, this.poleHeight);
-            const polePosition = (-this.patioBaseWidth) * i + this.poleWidth / 2;
-            if (i % 2 === 0 && this.patioWidthCount % 2 === 0 && this.patioWidthCount % 3 !== 0) {
-                this.frontPoles++;
-                scene.add(pole);
-            } else if (i % 3 == 0 && this.patioWidthCount % 3 === 0) {
-                this.frontPoles++;
-                scene.add(pole);
-            } else if (i % 3 == 0 && i % 2 == 0 && this.patioWidthCount % 3 === 0) {
-                this.frontPoles++;
-                scene.add(pole);
-            }
-        }
-
-//Side bars
-    for (let i = 0; i <= this.patioDepthCount; i++) {
-        if (i !== 0 && i !== this.patioDepthCount) {
-            this.windowsPerSlot = 2;
-            const polePosition = (-this.patioBaseWidth) * i + this.poleWidth / 2;
-            if (i % 2 === 0 && this.patioDepthCount % 2 === 0 && this.patioDepthCount % 3 !== 0) {
-                this.sidePoles++;
-                const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                scene.add(poleLeft);
-                scene.add(poleRight);
-            } else if (i % 3 == 0 && this.patioDepthCount % 3 === 0) {
-                this.sidePoles++;
-                const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                scene.add(poleLeft);
-                scene.add(poleRight);
-            } else if (i % 3 == 0 && i % 2 == 0 && this.patioDepthCount % 3 === 0) {
-                this.sidePoles++;
-                const poleLeft = this.pole(x + polePosition, y, this.poleHeight);
-                const poleRight = this.pole(x + polePosition, -y, this.poleHeight);
-                scene.add(poleLeft);
-                scene.add(poleRight);
-            }
-        }
-
-    }*/
 
     pole(x: number, y: number, height: number, color?: string): Mesh {
         const geometry = new BoxGeometry(this.poleWidth, height, this.poleWidth);

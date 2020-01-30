@@ -1,16 +1,22 @@
 html {
     font-family: 'Open Sans', 'Roboto', sans-serif;
+    color: #2b2b2b;
+    height:100%;
+    overflow: hidden;
+    position: fixed;
 }
 
 body {
     padding: 0;
     margin: 0;
+    height:100%;
     overflow: hidden;
+    position: fixed;
 }
 
 .threeContainer {
     height: 100vh;
-    width: calc(100vw - 560px);
+    width: calc(100vw - 280px);
 }
 
 .sidebar {
@@ -19,11 +25,16 @@ body {
 
 .infobar {
     width: 280px;
+    display:none;
 }
 
 .app-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+}
+
+.Collection {
+    width:100vw;
 }
 
 .hide {
@@ -49,6 +60,27 @@ input[type=range]::-webkit-slider-runnable-track {
     animate: 0.2s;
     background: #D7D7D7;
     border-radius: 53px;
+}
+
+.Demoview {
+    z-index: 100;
+    font-size: 20em;
+    position: absolute;
+    top: 50vh;
+    left: 30vw;
+    color: rgba(0,0,0,.5);
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently */
+    pointer-events: none;
 }
 
 input[type=range]::-webkit-slider-thumb {
@@ -124,8 +156,9 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .list-item-container {
-    padding-left: 16px;
-    padding-right: 16px;
+    background-color: #EDF3F7;
+    padding: 8px 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.5);
 }
 
 .input-title-container {
@@ -144,6 +177,7 @@ input[type=range]:focus::-ms-fill-upper {
 .list-text-container {
     margin-top: 6px;
     margin-bottom: 6px;
+    z-index: 2;
 }
 
 .input-value, .list-text-value {
@@ -152,7 +186,12 @@ input[type=range]:focus::-ms-fill-upper {
 
 .list-item-header {
     padding-left: 16px;
+    position: relative;
     display: flex;
+    z-index: 5;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    cursor: pointer;
+    height: 30px;
 }
 
 .list-item-header-title {
@@ -179,12 +218,6 @@ input[type=range]:focus::-ms-fill-upper {
 
 .list-item-collapsible {
     overflow: hidden;
-}
-
-.list-item-header {
-    cursor: pointer;
-    border: solid #DCDCDC;
-    border-width: 1px 0 1px 0;
 }
 
 .list-item-container {

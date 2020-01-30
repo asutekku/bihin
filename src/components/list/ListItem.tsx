@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+//import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export interface ListItemProps {
     text: string;
@@ -42,10 +42,8 @@ export class ListItem extends React.Component<ListItemProps,
                  onClick={this.toggleAnimClass}>
                 <div className={"list-item-header-showMore"}>
                     <span className={this.state.collapsed ? 'hide' : ''}>
-                        <FontAwesomeIcon icon={'chevron-right'}/>
                     </span>
                     <span className={this.state.collapsed ? '' : 'hide'}>
-                        <FontAwesomeIcon icon={'chevron-down'}/>
                     </span>
                 </div>
                 <div>

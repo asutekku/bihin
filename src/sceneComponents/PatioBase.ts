@@ -57,16 +57,3 @@ export class PatioBase {
         this.material.color = color;
     }
 }
-
-/*
-* Calculation for patio built on many smaller pieces
-*
-    for (let i = 0; i < this.width; i++) {
-        for (let d = 0; d < this.length; d++) {
-            const x = i * this.length - this.length / 2 + this.patioBaseWidth / 2,
-                y = d * this.width - this.width / 2 + this.patioBaseWidth / 2,
-                terracePiece = this.base(x, y);
-            scene.add(terracePiece);
-        }
-    }
- */

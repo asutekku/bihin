@@ -4,218 +4,96 @@ import {ListItem} from "./list/ListItem";
 import {RangeSlider} from "./list/RangeSlider";
 import {CheckBox} from "./list/CheckBox";
 import {SceneManager} from "../SceneManager";
-import {TerraceState} from "../Models/Terrace";
-import axios from 'axios'
+import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
+import {WindowState} from "../state/WindowState";
+import {WindowType} from "../Models/Window";
+import {RadioSelection} from "./list/RadioSelection";
+import {WindowModel} from "../sceneComponents/Window";
 
+interface ModelState {
+    window: WindowState;
+    author: {
+        name: string;
+    }
+}
 
-export class SideBar extends React.Component<{}, TerraceState> {
+export class SideBar extends React.Component<{}, ModelState> {
     constructor(props: any) {
         super(props);
-        this.state = {
-            name: '',
-            author: '',
-            description: '',
-            patio: {
-                niskajako: '',
-                rakenne: '',
-                sokkelinJaSeinanMittaero: '',
-                rakenneTyyppi: '',
-                materiaali: '',
-                korko: 0,
-                korkoMaasta: '',
-                lisaOtsaLaudat: undefined,
-                korkein: '',
-                jakolaudanKohta: 0,
-                laudoituksenSuunta: '',
-                maanpoisto: undefined,
-                maanPoisvienti: undefined,
-                kuutiomaara: 0,
-                perustus: '',
-                rakennusKangas: undefined,
-                soraa: undefined,
-                leveys: 3,
-                syvyys: 3,
-                korkeus: 0.2,
-            },
-            lasiterassi: {
-                leveys: 3,
-                syvyys: 3,
-                korkeus: 2.2,
-                takaKorkeus: 3,
-                etutolppienLukumaara: 0,
-                runko: {
-                    vari: '',
-                    materiaali: '',
-                    listat: {
-                        vari: ''
-                    },
-                    pellit: {
-                        vari: ''
-                    },
-                    ranni: {
-                        on: undefined,
-                        vari: ''
-                    },
-                    syoksy: {
-                        var: ''
-                    }
-                },
-                sivut: {
-                    vasen: {
-                        ovet: {
-                            lukumaara: 0,
-                            puitteet: undefined,
-                            lasinVari: '',
-                            lasinVahvuus: 0,
-                            vaakapuite: undefined,
-                            korkeus: 0
-                        },
-                        kiinteaLasiLkm: 0,
-                        lukkoTyyppi: '',
-                        kaide: {
-                            malli: '',
-                            korkeus: 0
-                        },
-                        muuta: ''
-                    },
-                    etu: {
-                        ovet: {
-                            lukumaara: 0,
-                            puitteet: undefined,
-                            lasinVari: '',
-                            lasinVahvuus: 0,
-                            vaakapuite: undefined,
-                            korkeus: 0
-                        },
-                        kiinteaLasiLkm: 0,
-                        lukkoTyyppi: '',
-                        kaide: {
-                            malli: '',
-                            korkeus: 0
-                        },
-                        muuta: ''
-                    },
-                    oikea: {
-                        ovet: {
-                            lukumaara: 0,
-                            puitteet: undefined,
-                            lasinVari: '',
-                            lasinVahvuus: 0,
-                            vaakapuite: undefined,
-                            korkeus: 0
-                        },
-                        kiinteaLasiLkm: 0,
-                        lukkoTyyppi: '',
-                        kaide: {
-                            malli: '',
-                            korkeus: 0
-                        },
-                        muuta: ''
-                    },
-                    taka: {
-                        ovet: {
-                            lukumaara: 0,
-                            puitteet: undefined,
-                            lasinVari: '',
-                            lasinVahvuus: 0,
-                            vaakapuite: undefined,
-                            korkeus: 0
-                        },
-                        kiinteaLasiLkm: 0,
-                        lukkoTyyppi: '',
-                        kaide: {
-                            malli: '',
-                            korkeus: 0
-                        },
-                        muuta: ''
-                    }
-                },
-                katto: {
-                    niska: {
-                        leveys: 0,
-                        korkeus: 0
-                    },
-                    materiaali: '',
-                    raystas: {
-                        ylitysVasen: 0,
-                        ylitysOikea: 0
-                    }
-                },
-                takaliitosPaalla: undefined,
-                eutliitosPaalla: undefined
-            }
-        };
+        this.state = {author: {name: ""}, window: new WindowState(WindowType.A)};
     }
 
     private updateWidth = (value: string) => {
-        const patio = {...this.state.patio};
-        patio.leveys = parseFloat(value);
-        this.setState({patio});
-        SceneManager.patio.width = parseFloat(value);
+        const window: WindowState = this.state.window;
+        window.width = parseFloat(value);
+        this.setState({window: window});
+        SceneManager.window.width = parseFloat(value);
     };
     private updateHeight = (value: string) => {
-        const patio = {...this.state.patio};
-        patio.korkeus = parseFloat(value);
-        this.setState({patio});
-        SceneManager.patio.height = parseFloat(value);
+        const window: WindowState = this.state.window;
+        window.height = parseFloat(value);
+        this.setState({window: window});
+        SceneManager.window.height = parseFloat(value);
     };
-    private updateLength = (value: string) => {
-        const patio = {...this.state.patio};
-        patio.leveys = parseFloat(value);
-        this.setState({patio});
-        SceneManager.patio.length = parseFloat(value);
+    private updateDepth = (value: string) => {
+        const window: WindowState = this.state.window;
+        window.depth = parseFloat(value);
+        this.setState({window: window});
+        SceneManager.window.depth = parseFloat(value);
     };
-    private updateCanopyHeight = (value: string) => {
+
+    /*private updateCanopyHeight = (value: string) => {
         const lasiterassi = {...this.state.lasiterassi};
         lasiterassi.korkeus = parseFloat(value);
         this.setState({lasiterassi});
-        SceneManager.patio.canopyHeight = parseFloat(value);
+        SceneManager.window.canopyHeight = parseFloat(value);
     };
     private updateCanopyHeightRaise = (value: string) => {
         const lasiterassi = {...this.state.lasiterassi};
         lasiterassi.takaKorkeus = parseFloat(value);
         this.setState({lasiterassi});
-        SceneManager.patio.canopyRaiseHeight = parseFloat(value);
+        SceneManager.window.height = parseFloat(value);
     };
-    private printData = () => {
+    private postItem = () => {
+        this.setState({image: SceneManager.getImageData()});
         axios.post('http://localhost:3000/terraces', JSON.stringify(this.state)).then((e) => {
             console.log("POST successful")
         });
-    };
+    };*/
 
     render() {
         return (
             <div className={"sidebar"}>
-                <ListItem text={"Patio"}>
+                <ListItem text={"Mitat"}>
                     <RangeSlider
                         title={"Leveys"}
-                        step={1}
-                        min={3}
-                        max={9}
-                        default={this.state.patio.leveys}
+                        step={0.1}
+                        min={0.2}
+                        max={3}
+                        default={this.state.window.width}
                         id={"patioWidth"}
                         target={this.updateWidth}
                     />
                     <RangeSlider
                         title={"Syvyys"}
-                        step={1}
-                        min={3}
-                        max={9}
-                        default={this.state.patio.syvyys}
+                        step={0.01}
+                        min={.13}
+                        max={0.21}
+                        default={this.state.window.depth}
                         id={"patioLength"}
-                        target={this.updateLength}
+                        target={this.updateDepth}
                     />
                     <RangeSlider
                         title={"Korkeus"}
                         step={0.1}
-                        min={0.1}
-                        max={1}
-                        default={this.state.patio.korkeus}
+                        min={0.2}
+                        max={2}
+                        default={this.state.window.height}
                         id={"patioHeight"}
                         target={this.updateHeight}
                     />
                 </ListItem>
-                <ListItem text={"Katos"}>
+                {/*<ListItem text={"Katos"}>
                     <CheckBox title={"Näytä"} checked={true} id={"showCanopy"}/>
                     <RangeSlider
                         title={"Korkeus"}
@@ -235,16 +113,16 @@ export class SideBar extends React.Component<{}, TerraceState> {
                         id={"canopyHeightBack"}
                         target={this.updateCanopyHeightRaise}
                     />
-                </ListItem>
-                <ListItem text={"Ikkunat ja ovet"}>
-                    <CheckBox title={"Näytä"} checked={false} id={"showWindows"}/>
+                </ListItem>*/}
+                <ListItem text={"Ikkunatyyppi"}>
+                    <RadioSelection title={'Ikkunan tyyppi'} id={'windowStyle'} options={Object.keys(WindowModel)}/>
+                    {/*<CheckBox title={"Näytä"} checked={false} id={"showWindows"}/>*/}
                 </ListItem>
                 <ListItem text={"Aidat"}>
                     <CheckBox title={"Näytä"} checked={false} id={"showFences"}/>
                 </ListItem>
-                <button className={"button-basic"} onClick={this.printData}>
-                    Tallenna tiedot
-                </button>
+                {/*<Button content={"Tallenna"} primary onClick={this.postItem}/>*/}
+                <Button content={"Tyhjennä"} secondary/>
             </div>
         );
     }

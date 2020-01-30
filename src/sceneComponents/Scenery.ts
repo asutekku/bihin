@@ -28,8 +28,8 @@ export default class Scenery {
 
     constructor(scene: Scene) {
         this.groundGeo = new PlaneBufferGeometry(300, 300);
-        this.groundMat = new MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff });
-        this.groundMat.color.setHSL(1.22, 0.39, 0.49);
+        this.groundMat = new MeshPhongMaterial({color: 0xffffff, specular: 0xffffff});
+        this.groundMat.color.setHex(0x608038);
         this.groundMat.specular.set(0);
         this.ground = new Mesh(this.groundGeo, this.groundMat);
         this.ground.receiveShadow = true;
@@ -82,10 +82,10 @@ export default class Scenery {
 
     private addSkydome(scene: Scene): void {
         const uniforms = {
-            topColor: { value: new Color(0x0077ff) },
-            bottomColor: { value: new Color(0xffffff) },
-            offset: { value: 33 },
-            exponent: { value: 0.6 }
+            topColor: {value: new Color(0x0077ff)},
+            bottomColor: {value: new Color(0xffffff)},
+            offset: {value: 33},
+            exponent: {value: 0.6}
         };
         uniforms.topColor.value.copy(this.hemiLight!.color);
         // TerraceDesigner.scene.fog.color.copy( uniforms.bottomColor.value );

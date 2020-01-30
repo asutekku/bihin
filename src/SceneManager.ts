@@ -1,15 +1,15 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, Color, Clock, Vector3, PCFSoftShadowMap } from "three";
+import {Clock, Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer} from "three";
 import GeneralLights from "./sceneComponents/GeneralLights";
 import SceneSubject from "./sceneComponents/SceneSubject";
 import Scenery from "./sceneComponents/Scenery";
-import { OrbitControls } from "three-orbitcontrols-ts";
-import { Patio } from "./sceneComponents/Patio";
+import {OrbitControls} from "three-orbitcontrols-ts";
+import {WindowModel} from "./sceneComponents/Window";
 
 export class SceneManager {
-    private canvas: HTMLCanvasElement;
+    private readonly canvas: HTMLCanvasElement;
     private readonly scene: Scene;
-    private renderer: WebGLRenderer;
-    private camera: PerspectiveCamera;
+    private static renderer: WebGLRenderer;
+    private readonly camera: PerspectiveCamera;
     //private sceneSubjects: (GeneralLights | SceneSubject)[];
     private scenery: Scenery;
     private clock: Clock;
@@ -20,7 +20,8 @@ export class SceneManager {
     };
     private controls: OrbitControls;
     private domContainer = document.getElementById("terraceDesignerContainer")!;
-    static patio: Patio;
+    static window: WindowModel;
+    static image: string;
 
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
@@ -28,13 +29,16 @@ export class SceneManager {
             width: this.canvas.width,
             height: this.canvas.height
         };
+
         this.scene = this.buildScene();
-        this.renderer = this.buildRender(this.screenDimensions);
+        SceneManager.renderer = this.buildRender(this.screenDimensions);
         this.camera = this.buildCamera(this.screenDimensions);
         this.controls = this.setupControls();
+
         //this.sceneSubjects = this.createSceneSubjects(this.scene);
+
         this.scenery = this.setupScenery(this.scene);
-        SceneManager.patio = this.setupPatio(this.scene);
+        SceneManager.window = this.setupWindow(this.scene);
         this.clock = new Clock();
     }
 
@@ -44,8 +48,26 @@ export class SceneManager {
         return scene;
     }
 
-    buildRender({ width, height }: { width: number; height: number }) {
-        const renderer: WebGLRenderer = new WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+    static getImageData(): string {
+        let imgData = "";
+        try {
+            const strMime = "image/jpeg";
+            imgData = SceneManager.renderer.domElement.toDataURL(strMime);
+            console.log(imgData);
+            return imgData;
+        } catch (e) {
+            console.log(e);
+        }
+        return imgData;
+    }
+
+    buildRender({width, height}: { width: number; height: number }) {
+        const renderer: WebGLRenderer = new WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true,
+            alpha: true,
+            preserveDrawingBuffer: true
+        });
         const DPR: number = window.devicePixelRatio ? window.devicePixelRatio : 1;
         renderer.setPixelRatio(DPR);
         renderer.setSize(width, height);
@@ -56,14 +78,16 @@ export class SceneManager {
         return renderer;
     }
 
-    buildCamera({ width, height }: { width: number; height: number }) {
+    buildCamera({width, height}: { width: number; height: number }) {
         const aspectRatio: number = width / height;
         const fieldOfView: number = 60;
         const nearPlane: number = 0.1;
         const farPlane: number = 300;
         const camera = new PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
-        camera.position.set(4, 1.8, 8);
-        camera.lookAt(new Vector3(0, 1.2, 0));
+        camera.position.set(2, 2, 2);
+        new Vector3(0, 1, 0)
+        //camera.lookAt(target);
+
         return camera;
     }
 
@@ -71,6 +95,7 @@ export class SceneManager {
         const controls = new OrbitControls(this.camera, this.domContainer);
         controls.maxPolarAngle = Math.PI / 2 - 0.1;
         controls.update();
+        controls.target = new Vector3(0, .5, 0);
         return controls;
     }
 
@@ -82,8 +107,8 @@ export class SceneManager {
         return new Scenery(scene);
     }
 
-    setupPatio(scene: Scene) {
-        return new Patio(scene);
+    setupWindow(scene: Scene) {
+        return new WindowModel(scene);
     }
 
     update() {
@@ -91,7 +116,7 @@ export class SceneManager {
         const elapsedTime = this.clock.getElapsedTime();
         /*for (let i = 0; i < this.sceneSubjects.length; i++)
             this.sceneSubjects[i].update(elapsedTime);*/
-        this.renderer.render(this.scene, this.camera);
+        SceneManager.renderer.render(this.scene, this.camera);
     }
 
     onMouseMove(x: number, y: number) {
@@ -100,7 +125,7 @@ export class SceneManager {
     }
 
     onWindowResize() {
-        const { width, height }: { width: number; height: number } = this.canvas;
+        const {width, height}: { width: number; height: number } = this.canvas;
 
         this.screenDimensions.width = width;
         this.screenDimensions.height = height;
@@ -108,6 +133,6 @@ export class SceneManager {
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
 
-        this.renderer.setSize(width, height);
+        SceneManager.renderer.setSize(width, height);
     }
 }
