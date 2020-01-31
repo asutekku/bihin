@@ -23,7 +23,8 @@ export class WindowState implements IWindowModel {
                 this.direction = Direction.horizontal;
                 this.equalDivision = false;
                 break;
-            case WindowType.Bi:
+            case WindowType.BI:
+                console.log("Got Bi");
                 this.windowCount = 2;
                 this.direction = Direction.horizontal;
                 this.equalDivision = false;
@@ -51,13 +52,14 @@ export class WindowState implements IWindowModel {
             case WindowType.T:
                 break;
         }
+        console.log("Count in State:" + this.windowCount);
     }
 
     constructor(type: WindowType) {
         this.width = 1.4;
         this.height = 1;
         this.depth = 0.21;
-        this.plankWidth = 0.4;
+        this.plankWidth = 0.04;
         this.firstWidth = this.width;
         this.type = type;
         this.frameWidth = 0.042;

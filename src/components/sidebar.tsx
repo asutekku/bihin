@@ -8,7 +8,6 @@ import Button from "semantic-ui-react/dist/commonjs/elements/Button/Button";
 import {WindowState} from "../state/WindowState";
 import {WindowType} from "../Models/Window";
 import {RadioSelection} from "./list/RadioSelection";
-import {WindowModel} from "../sceneComponents/Window";
 
 interface ModelState {
     window: WindowState;
@@ -27,20 +26,27 @@ export class SideBar extends React.Component<{}, ModelState> {
         const window: WindowState = this.state.window;
         window.width = parseFloat(value);
         this.setState({window: window});
-        SceneManager.window.width = parseFloat(value);
+        SceneManager.window.update(window);
     };
     private updateHeight = (value: string) => {
         const window: WindowState = this.state.window;
         window.height = parseFloat(value);
         this.setState({window: window});
-        SceneManager.window.height = parseFloat(value);
+        SceneManager.window.update(window);
     };
     private updateDepth = (value: string) => {
         const window: WindowState = this.state.window;
         window.depth = parseFloat(value);
         this.setState({window: window});
-        SceneManager.window.depth = parseFloat(value);
+        SceneManager.window.update(window);
     };
+    private changeStyle = (value: WindowType) => {
+        const window: WindowState = this.state.window;
+        window.setType(value);
+        this.setState({window: window});
+        SceneManager.window.update(window);
+        console.log(value);
+    }
 
     /*private updateCanopyHeight = (value: string) => {
         const lasiterassi = {...this.state.lasiterassi};
@@ -115,7 +121,8 @@ export class SideBar extends React.Component<{}, ModelState> {
                     />
                 </ListItem>*/}
                 <ListItem text={"Ikkunatyyppi"}>
-                    <RadioSelection title={'Ikkunan tyyppi'} id={'windowStyle'} options={Object.keys(WindowModel)}/>
+                    <RadioSelection title={'Ikkunan tyyppi'} id={'windowStyle'} options={Object.keys(WindowType)}
+                                    callBack={this.changeStyle}/>
                     {/*<CheckBox title={"Näytä"} checked={false} id={"showWindows"}/>*/}
                 </ListItem>
                 <ListItem text={"Aidat"}>

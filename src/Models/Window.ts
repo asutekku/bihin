@@ -9,13 +9,13 @@ export enum FrameColour {
 }
 
 export enum WindowType {
-    A,
-    Bi,
-    BL,
-    BTJ,
-    E,
-    F,
-    T
+    A = "A",
+    BI = "BI",
+    BL = "BL",
+    BTJ = "BTJ",
+    E = "E",
+    F = "F",
+    T = "T"
 }
 
 export enum Direction {

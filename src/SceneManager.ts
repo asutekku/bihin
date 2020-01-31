@@ -4,6 +4,8 @@ import SceneSubject from "./sceneComponents/SceneSubject";
 import Scenery from "./sceneComponents/Scenery";
 import {OrbitControls} from "three-orbitcontrols-ts";
 import {WindowModel} from "./sceneComponents/Window";
+import {WindowState} from "./state/WindowState";
+import {WindowType} from "./Models/Window";
 
 export class SceneManager {
     private readonly canvas: HTMLCanvasElement;
@@ -108,14 +110,12 @@ export class SceneManager {
     }
 
     setupWindow(scene: Scene) {
-        return new WindowModel(scene);
+        return new WindowModel(scene, new WindowState(WindowType.BI));
     }
 
     update() {
         this.controls.update();
         const elapsedTime = this.clock.getElapsedTime();
-        /*for (let i = 0; i < this.sceneSubjects.length; i++)
-            this.sceneSubjects[i].update(elapsedTime);*/
         SceneManager.renderer.render(this.scene, this.camera);
     }
 
